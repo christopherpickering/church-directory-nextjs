@@ -1,5 +1,4 @@
 // storage-adapter-import-placeholder
-import { mongooseAdapter } from '@payloadcms/db-mongodb' // database-adapter-import
 
 import sharp from 'sharp' // sharp-import
 import path from 'path'
@@ -17,9 +16,17 @@ import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 
+import invariant from 'tiny-invariant'
+import { postgresAdapter } from '@payloadcms/db-postgres'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const requiredEnvVars = ['PAYLOAD_SECRET', 'DATABASE_URI', 'MEILISEARCH_HOST']
+
+for (const envVar of requiredEnvVars) {
+  invariant(process.env[envVar], `${envVar} is missing from env.`)
+}
 export default buildConfig({
   admin: {
     components: {
@@ -60,17 +67,16 @@ export default buildConfig({
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
   // database-adapter-config-start
-  db: mongooseAdapter({
-    url: process.env.DATABASE_URI,
+  db: postgresAdapter({
+    pool: {
+      connectionString: process.env.DATABASE_URI,
+    },
   }),
   // database-adapter-config-end
   collections: [Pages, Posts, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
-  plugins: [
-    ...plugins,
-    // storage-adapter-placeholder
-  ],
+  plugins: [...plugins],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {
