@@ -1,0 +1,129 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { Home, MapPin, History, LogOut, MessageCircle, Locate, PinIcon } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
+
+export default function Navigation() {
+  const pathname = usePathname()
+  const [activeRoute, setActiveRoute] = useState('/')
+
+  // Update active route based on pathname
+  useEffect(() => {
+    if (pathname) {
+      setActiveRoute(pathname)
+    }
+  }, [pathname])
+
+  const navItems = [
+    { href: '/', label: 'Home', icon: <Home className="h-5 w-5" /> },
+    { href: '/addresses', label: 'Addresses', icon: <PinIcon className="h-5 w-5" /> },
+    { href: '/history', label: 'History', icon: <History className="h-5 w-5" /> },
+    { href: '/map', label: 'Map', icon: <MapPin className="h-5 w-5" /> },
+    { href: '/logout', label: 'Log out', icon: <LogOut className="h-5 w-5" /> },
+  ]
+
+  return (
+    <nav className="bg-primary-dark text-primary-dark border-t pb-10 border-primary-dark/50">
+      <div className="container mx-auto flex items-center justify-between px-4">
+        {/* Mobile Navigation with Icons */}
+        <div className="flex w-full justify-between lg:hidden">
+          {navItems.map((item) => (
+            <NavIconItem
+              key={item.href}
+              href={item.href}
+              icon={item.icon}
+              label={item.label}
+              active={activeRoute == item.href}
+              onClick={() => setActiveRoute(item.href)}
+            />
+          ))}
+          <NavIconItem
+            href="/contact"
+            icon={<MessageCircle className="h-5 w-5" />}
+            label="Contact"
+            active={activeRoute === '/contact'}
+            onClick={() => setActiveRoute('/contact')}
+          />
+        </div>
+
+        {/* Desktop Navigation */}
+        <div className="hidden lg:flex">
+          <NavItem href="/" active={activeRoute === '/'}>
+            Home
+          </NavItem>
+          <NavItem href="/addresses" active={activeRoute === '/addresses'}>
+            Addresses
+          </NavItem>
+          <NavItem href="/history" active={activeRoute === '/history'}>
+            History
+          </NavItem>
+          <NavItem href="/map" active={activeRoute === '/map'}>
+            Map
+          </NavItem>
+          <NavItem href="/logout" active={activeRoute === '/logout'}>
+            <span className="flex items-center gap-1">
+              Log out <LogOut className="h-4 w-4" />
+            </span>
+          </NavItem>
+        </div>
+        <NavItem href="/contact" active={activeRoute === '/contact'} className="hidden lg:block">
+          Contact
+        </NavItem>
+      </div>
+    </nav>
+  )
+}
+
+interface NavItemProps {
+  href: string
+  children: React.ReactNode
+  active?: boolean
+  className?: string
+}
+
+function NavItem({ href, children, active = false, className = '' }: NavItemProps) {
+  return (
+    <Link
+      href={href}
+      className={`px-4 py-3 text-sm font-medium transition-colors hover:bg-primary/50 ${
+        active ? 'bg-primary/50 text-primary hover:bg-primary-dark/50' : ''
+      } ${className}`}
+    >
+      {children}
+    </Link>
+  )
+}
+
+interface NavIconItemProps {
+  href: string
+  icon: React.ReactNode
+  label: string
+  active?: boolean
+  className?: string
+  onClick?: () => void
+}
+
+function NavIconItem({
+  href,
+  icon,
+  label,
+  active = false,
+  className = '',
+  onClick,
+}: NavIconItemProps) {
+  console.log(active, href, label)
+  return (
+    <Link
+      href={href}
+      className={`flex items-center justify-center px-3 py-3 text-sm font-medium transition-colors hover:bg-primary-dark/10 ${
+        active ? 'bg-primary/50 text-primary hover:bg-primary-dark/50' : ''
+      } ${className}`}
+      onClick={onClick}
+    >
+      {icon}
+      {active && <span className="ml-1 sm:inline-block xs:hidden text-primary">{label}</span>}
+    </Link>
+  )
+}
