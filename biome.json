@@ -1,0 +1,124 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "ignore": [
+      "node_modules",
+      ".next",
+      "data.ms",
+      "media",
+      "importMap.js",
+      ".husky",
+      ".DS_Store",
+      "analyze",
+      "src/app/(payload)",
+      "src/migrations",
+      ".pnpm-store"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "formatWithErrors": false,
+    "indentWidth": 2
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "off",
+        "noConsole": {
+          "level": "error",
+          "options": {
+            "allow": ["error", "warn"]
+          }
+        },
+        "noEmptyBlockStatements": "error"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off",
+        "noUnsafeOptionalChaining": "off",
+        "useImportExtensions": "off",
+        "noUndeclaredVariables": "error",
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error",
+        "useArrayLiterals": "error",
+        "useHookAtTopLevel": "error"
+      },
+      "a11y": {
+        "noNoninteractiveElementToInteractiveRole": "off"
+      },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "off",
+        "noUselessUndefinedInitialization": "error",
+        "useDateNow": "error",
+        "useSimplifiedLogicExpression": "error"
+      },
+      "nursery": {
+        "noCommonJs": "error",
+        "noDescendingSpecificity": "error",
+        "noDocumentCookie": "error",
+        "noDocumentImportInPage": "error",
+        "noDuplicateCustomProperties": "error",
+        "noDuplicateElseIf": "error",
+        "noDuplicateProperties": "error",
+        "noDuplicatedFields": "error",
+        "noDynamicNamespaceImportAccess": "error",
+        "noEnum": "error",
+        "noHeadElement": "error",
+        "noHeadImportInDocument": "error",
+        "noImgElement": "error",
+        "noIrregularWhitespace": "error",
+        "noMissingVarFunction": "error",
+        "noNestedTernary": "off",
+        "noOctalEscape": "error",
+        "noRestrictedImports": "error",
+        "noRestrictedTypes": "error",
+        "noSecrets": "off",
+        "noStaticElementInteractions": "error",
+        "noSubstr": "error",
+        "noUnknownPseudoClass": "error",
+        "noTemplateCurlyInString": "error",
+        "noUnknownPseudoElement": "error",
+        "noUnknownTypeSelector": "error",
+        "noUselessEscapeInRegex": "error",
+        "noUselessStringRaw": "error",
+        "noValueAtRule": "error",
+        "useAdjacentOverloadSignatures": "error",
+        "useAtIndex": "error",
+        "useConsistentMemberAccessibility": "error",
+        "useGoogleFontDisplay": "error",
+        "useGuardForIn": "error",
+        "useSortedClasses": "error",
+        "useTrimStartEnd": "error",
+        "useValidAutocomplete": "error"
+      },
+      "performance": {
+        "noReExportAll": "error",
+        "useTopLevelRegex": "error",
+        "noAccumulatingSpread": "off"
+      },
+      "style": {
+        "noNamespaceImport": "off",
+        "useNodejsImportProtocol": "off"
+      }
+    },
+    "ignore": ["./src/payload-types.ts"]
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "asNeeded"
+    }
+  }
+}

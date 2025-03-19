@@ -1,0 +1,80 @@
+name: Test
+run-name: Run Test 🚀
+on:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  DATABASE_URI: postgres://postgres:postgres@localhost:5432/pc_test
+  MEILISEARCH_URL: http://localhost:7700
+  MEILISEARCH_KEY: meilisearch
+  NEXT_PUBLIC_LOCATIONIQ_ACCESS_TOKEN: ""
+  NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: ""
+  NEXTAUTH_SECRET: 123456
+  NEXTAUTH_URL: http://localhost:3000/api/auth
+  MEILISEARCH_HOST: http://127.0.0.1:7700
+  MEILISEARCH_API_KEY: meilisearch
+  LIBRE_KEY: 123
+  LIBRE_URL: http://localhost/translate
+  PAYLOAD_SECRET: 123456789
+  SMTP_FROM: test@test.test
+  SMTP_NAME: test
+  NEXT_PUBLIC_IS_LIVE: false
+  YOUTUBE_API_KEY: 123456789
+  DEEPSEEK_API_KEY: 123456789
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: latest
+        run_install: false
+
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
+      with:
+        node-version: 22.x
+        cache: 'pnpm'
+
+    - name: Next cache
+      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4
+      with:
+        path: ${{ github.workspace }}/.next/cache
+        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+        restore-keys: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+    - name: Start Meilisearch
+      run: |
+        docker run -d --rm --name meilisearch -p 7700:7700 -v $(pwd)/meili_data:/meili_data getmeili/meilisearch:v1.12
+
+    - name: check search
+      run: sleep 5; curl -v http://localhost:7700/health
+
+    - run: pnpm install
+    - run: pnpm format
+    - run: pnpm lint
+    - run: pnpm typecheck
+    - name: Build
+      run: |
+        pnpm migrate
+        pnpm build
+
