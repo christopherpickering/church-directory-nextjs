@@ -1,0 +1,4 @@
+echo "Did you migrate?"
+echo ""
+# pnpm typecheck
+lint-staged
