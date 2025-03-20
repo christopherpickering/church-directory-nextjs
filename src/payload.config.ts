@@ -20,7 +20,7 @@ import invariant from 'tiny-invariant'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const requiredEnvVars = ['PAYLOAD_SECRET', 'DATABASE_URI', 'MEILISEARCH_HOST']
+const requiredEnvVars = ['PAYLOAD_SECRET', 'DATABASE_URI']
 
 for (const envVar of requiredEnvVars) {
   invariant(process.env[envVar], `${envVar} is missing from env.`)

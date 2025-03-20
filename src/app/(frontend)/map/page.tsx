@@ -1,10 +1,6 @@
 import DashboardLayout from '../components/dashboard-layout'
 
-interface Props {
-  readonly _?: never
-}
-
-const MapPage = (_props: Props) => {
+export default function MapPage() {
   return (
     <div className="pt-16 pb-24">
       <DashboardLayout>
@@ -29,5 +25,3 @@ const MapPage = (_props: Props) => {
     </div>
   )
 }
-
-export default MapPage

@@ -1,10 +1,6 @@
 import DashboardLayout from '../components/dashboard-layout'
 
-interface Props {
-  readonly _?: never
-}
-
-const HistoryPage = (_props: Props) => {
+export default function HistoryPage() {
   return (
     <div className="pt-16 pb-24">
       <DashboardLayout>
@@ -13,5 +9,3 @@ const HistoryPage = (_props: Props) => {
     </div>
   )
 }
-
-export default HistoryPage

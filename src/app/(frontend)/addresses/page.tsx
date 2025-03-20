@@ -1,11 +1,7 @@
 import DashboardLayout from '../components/dashboard-layout'
 import ListView from '../components/list-view'
 
-interface Props {
-  readonly _?: never
-}
-
-const AddressesPage = (_props: Props) => {
+export default function AddressesPage() {
   return (
     <div className="pt-16 pb-24">
       <DashboardLayout>
@@ -14,5 +10,3 @@ const AddressesPage = (_props: Props) => {
     </div>
   )
 }
-
-export default AddressesPage
