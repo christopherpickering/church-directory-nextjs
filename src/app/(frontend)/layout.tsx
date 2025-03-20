@@ -5,7 +5,7 @@ import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import type React from 'react'
 
-import { Footer } from '@/Footer/Component'
+import { FooterComponent } from '@/Footer/Component'
 import { AdminBar } from '@/components/AdminBar'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
@@ -49,7 +49,7 @@ export default async function RootLayout({
             }}
           />
           {children}
-          <Footer />
+          <FooterComponent />
         </Providers>
       </body>
     </html>
