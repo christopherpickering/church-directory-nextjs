@@ -1,35 +1,19 @@
 import type { Metadata } from 'next'
 
+import { Providers } from '@/providers'
+import { InitTheme } from '@/providers/Theme/InitTheme'
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { cn } from '@/utilities/ui'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import type React from 'react'
 
-import { FooterComponent } from '@/Footer/Component'
-import { AdminBar } from '@/components/AdminBar'
-import { Providers } from '@/providers'
-import { InitTheme } from '@/providers/Theme/InitTheme'
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import { draftMode } from 'next/headers'
-
 import './globals.css'
-import { getMeUser } from '@/utilities/getMeUser'
 import { getServerSideURL } from '@/utilities/getURL'
-import { redirect } from 'next/navigation'
 
 export default async function RootLayout({
   children,
 }: { children: React.ReactNode }) {
-  const { isEnabled } = await draftMode()
-
-  // Check authentication
-  try {
-    await getMeUser({ nullUserRedirect: '/admin' })
-  } catch (_error) {
-    // If unauthenticated, redirect to admin login
-    redirect('/admin')
-  }
-
   return (
     <html
       className={cn(GeistSans.variable, GeistMono.variable)}
@@ -42,15 +26,7 @@ export default async function RootLayout({
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
       <body>
-        <Providers>
-          <AdminBar
-            adminBarProps={{
-              preview: isEnabled,
-            }}
-          />
-          {children}
-          <FooterComponent />
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

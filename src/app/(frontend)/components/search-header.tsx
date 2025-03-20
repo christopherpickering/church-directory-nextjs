@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 import { Search } from 'lucide-react'
 
 export default function SearchHeader() {
@@ -20,6 +21,9 @@ export default function SearchHeader() {
             <Search className="h-4 w-4" />
             <span className="sr-only">Search</span>
           </Button>
+          <div className="flex flex-col-reverse items-start gap-4 md:flex-row md:items-center">
+            <ThemeSelector />
+          </div>
         </div>
       </div>
     </header>

@@ -1,5 +1,12 @@
-import PageTemplate, { generateMetadata } from './[slug]/page'
+import DashboardLayout from './components/dashboard-layout'
+import MapView from './components/map-view'
 
-export default PageTemplate
-
-export { generateMetadata }
+export default async function Page() {
+  return (
+    <article className="pt-16 pb-24">
+      <DashboardLayout>
+        <MapView />
+      </DashboardLayout>
+    </article>
+  )
+}
