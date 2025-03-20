@@ -1,5 +1,3 @@
-import type { Metadata } from 'next'
-
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { draftMode } from 'next/headers'
@@ -7,7 +5,6 @@ import { getPayload } from 'payload'
 import { cache } from 'react'
 
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { generateMeta } from '@/utilities/generateMeta'
 import DashboardLayout from '../components/dashboard-layout'
 import MapView from '../components/map-view'
 
@@ -67,17 +64,6 @@ export default async function Page({ params: paramsPromise }: Args) {
       {draft && <LivePreviewListener />}
     </article>
   )
-}
-
-export async function generateMetadata({
-  params: paramsPromise,
-}: Args): Promise<Metadata> {
-  const { slug = 'home' } = await paramsPromise
-  const page = await queryPageBySlug({
-    slug,
-  })
-
-  return generateMeta({ doc: page })
 }
 
 const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
