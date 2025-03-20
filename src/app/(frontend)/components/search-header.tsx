@@ -1,15 +1,15 @@
-import { Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Search } from 'lucide-react'
 
 export default function SearchHeader() {
   return (
-    <header className="bg-primary-dark text-primary border-b border-primary-dark/10">
+    <header className="border-primary-dark/10 border-b bg-primary-dark text-primary">
       <div className="container mx-auto flex items-center justify-between p-4">
-        <h1 className="text-2xl font-bold">ADDRESS DIRECTORY</h1>
+        <h1 className="font-bold text-2xl">ADDRESS DIRECTORY</h1>
         <div className="flex items-center gap-2">
           <Input
-            className="w-64 bg-primary-foreground text-primary-dark  dark:bg-primary-dark"
+            className="w-64 bg-primary-foreground text-primary-dark dark:bg-primary-dark"
             placeholder="Search..."
           />
           <Button

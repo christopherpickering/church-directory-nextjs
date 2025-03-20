@@ -16,7 +16,9 @@ export const generateSearchIndexHandler =
     )
 
     //@ts-ignore
-    const results = await searchClient.search(requests, { locales: req.locale })
+    const results = await searchClient.search(requests, {
+      locales: req.locale,
+    })
 
     return Response.json(
       {

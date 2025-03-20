@@ -1,9 +1,10 @@
-import React from 'react'
 import DashboardLayout from '../components/dashboard-layout'
 
-type Props = {}
+interface Props {
+  readonly _?: never
+}
 
-const HistoryPage = (props: Props) => {
+const HistoryPage = (_props: Props) => {
   return (
     <div className="pt-16 pb-24">
       <DashboardLayout>

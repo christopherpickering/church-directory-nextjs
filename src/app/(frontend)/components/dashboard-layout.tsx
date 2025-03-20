@@ -1,8 +1,8 @@
 'use client'
 
-import type * as React from 'react'
 import Navigation from '@/app/(frontend)/components/navigation'
 import SearchHeader from '@/app/(frontend)/components/search-header'
+import type * as React from 'react'
 
 interface DashboardLayoutProps {
   children: React.ReactNode

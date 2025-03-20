@@ -14,6 +14,8 @@
     "ii": "cross-env NODE_OPTIONS=--no-deprecation pnpm --ignore-workspace install",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation biome lint .",
     "lint:fix": "cross-env NODE_OPTIONS=--no-deprecation biome lint --write .",
+    "lint:autofix": "biome check --apply-unsafe --no-errors-on-unmatched --files-ignore-unknown=true --max-diagnostics 500 .",
+    "lint:safe": "biome check --apply --no-errors-on-unmatched --files-ignore-unknown=true --max-diagnostics 500 .",
     "format": "biome format .",
     "format:fix": "biome format --write .",
     "test:fix": "run-s format:fix lint:fix",

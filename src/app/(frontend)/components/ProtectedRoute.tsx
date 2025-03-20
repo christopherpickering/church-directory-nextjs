@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import type React from 'react'
 
 interface ProtectedRouteProps {
   children: React.ReactNode

@@ -9,10 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import React from 'react'
+import type React from 'react'
 import { Controller } from 'react-hook-form'
-
-import { Error } from '../Error'
 import { Width } from '../Width'
 import { stateOptions } from './options'
 
@@ -40,7 +38,10 @@ export const State: React.FC<
           const controlledValue = stateOptions.find((t) => t.value === value)
 
           return (
-            <Select onValueChange={(val) => onChange(val)} value={controlledValue?.value}>
+            <Select
+              onValueChange={(val) => onChange(val)}
+              value={controlledValue?.value}
+            >
               <SelectTrigger className="w-full" id={name}>
                 <SelectValue placeholder={label} />
               </SelectTrigger>

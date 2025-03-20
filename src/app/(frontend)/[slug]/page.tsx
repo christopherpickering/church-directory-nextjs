@@ -1,20 +1,18 @@
 import type { Metadata } from 'next'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
-import configPromise from '@payload-config'
-import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
-import { draftMode } from 'next/headers'
-import React, { cache } from 'react'
 import { homeStatic } from '@/endpoints/seed/home-static'
+import configPromise from '@payload-config'
+import { draftMode } from 'next/headers'
+import { type RequiredDataFromCollectionSlug, getPayload } from 'payload'
+import { cache } from 'react'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
+import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
-import PageClient from './page.client'
-import { LivePreviewListener } from '@/components/LivePreviewListener'
 import DashboardLayout from '../components/dashboard-layout'
 import MapView from '../components/map-view'
-import AddressesPage from '../addresses/page'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -49,7 +47,7 @@ type Args = {
 export default async function Page({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { slug = 'home' } = await paramsPromise
-  const url = '/' + slug
+  const url = `/${slug}`
 
   let page: RequiredDataFromCollectionSlug<'pages'> | null
 
@@ -86,7 +84,9 @@ export default async function Page({ params: paramsPromise }: Args) {
   )
 }
 
-export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+export async function generateMetadata({
+  params: paramsPromise,
+}: Args): Promise<Metadata> {
   const { slug = 'home' } = await paramsPromise
   const page = await queryPageBySlug({
     slug,

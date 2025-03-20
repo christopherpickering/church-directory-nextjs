@@ -1,14 +1,15 @@
 'use client'
 
-import React, { Fragment, useCallback, useState } from 'react'
 import { toast } from '@payloadcms/ui'
+import type React from 'react'
+import { Fragment, useCallback, useState } from 'react'
 
 import './index.scss'
 
 const SuccessMessage: React.FC = () => (
   <div>
     Database seeded! You can now{' '}
-    <a target="_blank" href="/">
+    <a target="_blank" href="/" rel="noreferrer">
       visit your website
     </a>
   </div>
@@ -32,7 +33,7 @@ export const SeedButton: React.FC = () => {
         return
       }
       if (error) {
-        toast.error(`An error occurred, please refresh and try again.`)
+        toast.error('An error occurred, please refresh and try again.')
         return
       }
 
@@ -79,7 +80,7 @@ export const SeedButton: React.FC = () => {
 
   return (
     <Fragment>
-      <button className="seedButton" onClick={handleClick}>
+      <button type="button" className="seedButton" onClick={handleClick}>
         Seed your database
       </button>
       {message}

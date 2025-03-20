@@ -1,33 +1,38 @@
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
-import {
+import type {
   DefaultNodeTypes,
   SerializedBlockNode,
   SerializedLinkNode,
-  type DefaultTypedEditorState,
 } from '@payloadcms/richtext-lexical'
 import {
-  JSXConvertersFunction,
-  LinkJSXConverter,
   RichText as ConvertRichText,
+  type JSXConvertersFunction,
+  LinkJSXConverter,
 } from '@payloadcms/richtext-lexical/react'
 
-import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
+import { CodeBlock, type CodeBlockProps } from '@/blocks/Code/Component'
 
+import { BannerBlock } from '@/blocks/Banner/Component'
+import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import type {
   BannerBlock as BannerBlockProps,
   CallToActionBlock as CTABlockProps,
   MediaBlock as MediaBlockProps,
 } from '@/payload-types'
-import { BannerBlock } from '@/blocks/Banner/Component'
-import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { cn } from '@/utilities/ui'
+import type React from 'react'
 
 type NodeTypes =
   | DefaultNodeTypes
-  | SerializedBlockNode<CTABlockProps | MediaBlockProps | BannerBlockProps | CodeBlockProps>
+  | SerializedBlockNode<
+      CTABlockProps | MediaBlockProps | BannerBlockProps | CodeBlockProps
+    >
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
-  const { value, relationTo } = linkNode.fields.doc!
+  if (!linkNode.fields.doc) {
+    throw new Error('Missing doc field in linkNode')
+  }
+  const { value, relationTo } = linkNode.fields.doc
   if (typeof value !== 'object') {
     throw new Error('Expected value to be an object')
   }
@@ -35,14 +40,18 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   return relationTo === 'posts' ? `/posts/${slug}` : `/${slug}`
 }
 
-const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
+const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
+  defaultConverters,
+}) => ({
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
   blocks: {
-    banner: ({ node }) => <BannerBlock className="col-start-2 mb-4" {...node.fields} />,
+    banner: ({ node }) => (
+      <BannerBlock className="col-start-2 mb-4" {...node.fields} />
+    ),
     mediaBlock: ({ node }) => (
       <MediaBlock
-        className="col-start-1 col-span-3"
+        className="col-span-3 col-start-1"
         imgClassName="m-0"
         {...node.fields}
         captionClassName="mx-auto max-w-[48rem]"
@@ -55,11 +64,12 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
   },
 })
 
-type Props = {
-  data: DefaultTypedEditorState
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string
+  content: unknown
   enableGutter?: boolean
   enableProse?: boolean
-} & React.HTMLAttributes<HTMLDivElement>
+}
 
 export default function RichText(props: Props) {
   const { className, enableProse = true, enableGutter = true, ...rest } = props
@@ -71,7 +81,7 @@ export default function RichText(props: Props) {
         {
           container: enableGutter,
           'max-w-none': !enableGutter,
-          'mx-auto prose md:prose-md dark:prose-invert': enableProse,
+          'prose md:prose-md dark:prose-invert mx-auto': enableProse,
         },
         className,
       )}

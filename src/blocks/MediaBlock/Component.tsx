@@ -1,8 +1,8 @@
 import type { StaticImageData } from 'next/image'
 
-import { cn } from '@/utilities/ui'
-import React from 'react'
 import RichText from '@/components/RichText'
+import { cn } from '@/utilities/ui'
+import type React from 'react'
 
 import type { MediaBlock as MediaBlockProps } from '@/payload-types'
 
@@ -29,7 +29,7 @@ export const MediaBlock: React.FC<Props> = (props) => {
     disableInnerContainer,
   } = props
 
-  let caption
+  let caption: any = null
   if (media && typeof media === 'object') caption = media.caption
 
   return (
@@ -44,7 +44,10 @@ export const MediaBlock: React.FC<Props> = (props) => {
     >
       {(media || staticImage) && (
         <Media
-          imgClassName={cn('border border-border rounded-[0.8rem]', imgClassName)}
+          imgClassName={cn(
+            'border border-border rounded-[0.8rem]',
+            imgClassName,
+          )}
           resource={media}
           src={staticImage}
         />

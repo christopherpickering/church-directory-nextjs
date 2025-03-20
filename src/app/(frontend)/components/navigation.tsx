@@ -1,9 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Home, MapPin, History, LogOut, MessageCircle, Locate, PinIcon } from 'lucide-react'
-import { usePathname } from 'next/navigation'
+import {
+  History,
+  Home,
+  LogOut,
+  MapPin,
+  MessageCircle,
+  PinIcon,
+} from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import type React from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Navigation() {
   const pathname = usePathname()
@@ -18,14 +26,22 @@ export default function Navigation() {
 
   const navItems = [
     { href: '/', label: 'Home', icon: <Home className="h-5 w-5" /> },
-    { href: '/addresses', label: 'Addresses', icon: <PinIcon className="h-5 w-5" /> },
-    { href: '/history', label: 'History', icon: <History className="h-5 w-5" /> },
+    {
+      href: '/addresses',
+      label: 'Addresses',
+      icon: <PinIcon className="h-5 w-5" />,
+    },
+    {
+      href: '/history',
+      label: 'History',
+      icon: <History className="h-5 w-5" />,
+    },
     { href: '/map', label: 'Map', icon: <MapPin className="h-5 w-5" /> },
     { href: '/logout', label: 'Log out', icon: <LogOut className="h-5 w-5" /> },
   ]
 
   return (
-    <nav className="bg-primary-dark text-primary-dark border-t pb-10 border-primary-dark/50">
+    <nav className="border-primary-dark/50 border-t bg-primary-dark pb-10 text-primary-dark">
       <div className="container mx-auto flex items-center justify-between px-4">
         {/* Mobile Navigation with Icons */}
         <div className="flex w-full justify-between lg:hidden">
@@ -35,7 +51,7 @@ export default function Navigation() {
               href={item.href}
               icon={item.icon}
               label={item.label}
-              active={activeRoute == item.href}
+              active={activeRoute === item.href}
               onClick={() => setActiveRoute(item.href)}
             />
           ))}
@@ -68,7 +84,11 @@ export default function Navigation() {
             </span>
           </NavItem>
         </div>
-        <NavItem href="/contact" active={activeRoute === '/contact'} className="hidden lg:block">
+        <NavItem
+          href="/contact"
+          active={activeRoute === '/contact'}
+          className="hidden lg:block"
+        >
           Contact
         </NavItem>
       </div>
@@ -83,11 +103,16 @@ interface NavItemProps {
   className?: string
 }
 
-function NavItem({ href, children, active = false, className = '' }: NavItemProps) {
+function NavItem({
+  href,
+  children,
+  active = false,
+  className = '',
+}: NavItemProps) {
   return (
     <Link
       href={href}
-      className={`px-4 py-3 text-sm font-medium transition-colors hover:bg-primary/50 ${
+      className={`px-4 py-3 font-medium text-sm transition-colors hover:bg-primary/50 ${
         active ? 'bg-primary/50 text-primary hover:bg-primary-dark/50' : ''
       } ${className}`}
     >
@@ -113,17 +138,20 @@ function NavIconItem({
   className = '',
   onClick,
 }: NavIconItemProps) {
-  console.log(active, href, label)
   return (
     <Link
       href={href}
-      className={`flex items-center justify-center px-3 py-3 text-sm font-medium transition-colors hover:bg-primary-dark/10 ${
+      className={`flex items-center justify-center px-3 py-3 font-medium text-sm transition-colors hover:bg-primary-dark/10 ${
         active ? 'bg-primary/50 text-primary hover:bg-primary-dark/50' : ''
       } ${className}`}
       onClick={onClick}
     >
       {icon}
-      {active && <span className="ml-1 sm:inline-block xs:hidden text-primary">{label}</span>}
+      {active && (
+        <span className="ml-1 xs:hidden text-primary sm:inline-block">
+          {label}
+        </span>
+      )}
     </Link>
   )
 }

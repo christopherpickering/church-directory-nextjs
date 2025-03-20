@@ -1,14 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import {
   Pagination,
   PaginationContent,
   PaginationItem,
@@ -16,17 +8,28 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import { addressData } from '../lib/data'
 
 export default function ListView() {
   return (
     <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-        <Input className="w-full" placeholder="Search by location, zip code, ..." />
+      <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
+        <Input
+          className="w-full"
+          placeholder="Search by location, zip code, ..."
+        />
         <Button className="w-full sm:w-auto">Seek</Button>
       </div>
 
-      <div className="rounded-md border overflow-x-auto">
+      <div className="overflow-x-auto rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>

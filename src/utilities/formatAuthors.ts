@@ -1,4 +1,4 @@
-import { Post } from '@/payload-types'
+import type { Post } from '@/payload-types'
 
 /**
  * Formats an array of populatedAuthors from Posts into a prettified string.
@@ -20,5 +20,5 @@ export const formatAuthors = (
   if (authorNames.length === 1) return authorNames[0]
   if (authorNames.length === 2) return `${authorNames[0]} and ${authorNames[1]}`
 
-  return `${authorNames.slice(0, -1).join(', ')} and ${authorNames[authorNames.length - 1]}`
+  return `${authorNames.slice(0, -1).join(', ')} and ${authorNames.at(-1)}`
 }

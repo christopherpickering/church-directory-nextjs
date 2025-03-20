@@ -1,5 +1,5 @@
 import type { Media, User } from '@/payload-types'
-import { RequiredDataFromCollectionSlug } from 'payload'
+import type { RequiredDataFromCollectionSlug } from 'payload'
 
 export type PostArgs = {
   heroImage: Media
@@ -7,7 +7,9 @@ export type PostArgs = {
   author: User
 }
 
-export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> = ({
+export const post1: (
+  args: PostArgs,
+) => RequiredDataFromCollectionSlug<'posts'> = ({
   heroImage,
   blockImage,
   author,
@@ -182,7 +184,30 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
             fields: {
               blockName: 'Generate Text',
               blockType: 'code',
-              code: "async function generateText(prompt) {\n    const apiKey = 'your-api-key';\n    const apiUrl = 'https://api.example.com/generate-text';\n\n    const response = await fetch(apiUrl, {\n        method: 'POST',\n        headers: {\n            'Content-Type': 'application/json',\n            'Authorization': `Bearer ${apiKey}`\n        },\n        body: JSON.stringify({\n            model: 'text-generation-model',\n            prompt: prompt,\n            max_tokens: 50\n        })\n    });\n\n    const data = await response.json();\n    console.log(data.choices[0].text.trim());\n}\n\n// Example usage\ngenerateText(\"Once upon a time in a faraway land,\");\n",
+              code: `async function generateText(prompt) {
+    const apiKey = 'your-api-key';
+    const apiUrl = 'https://api.example.com/generate-text';
+
+    const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': \`Bearer \${apiKey}\`
+        },
+        body: JSON.stringify({
+            model: 'text-generation-model',
+            prompt: prompt,
+            max_tokens: 50
+        })
+    });
+
+    const data = await response.json();
+    console.log(data.choices[0].text.trim());
+}
+
+// Example usage
+generateText("Once upon a time in a faraway land,");
+`,
               language: 'javascript',
             },
             format: '',

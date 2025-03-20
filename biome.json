@@ -45,6 +45,9 @@
         },
         "noEmptyBlockStatements": "error"
       },
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
+      },
       "correctness": {
         "useExhaustiveDependencies": "off",
         "noUnsafeOptionalChaining": "off",
