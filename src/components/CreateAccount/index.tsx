@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState, Suspense } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
@@ -19,10 +19,8 @@ type FormData = {
   passwordConfirm: string
 }
 
-export const CreateAccount: React.FC<{
-  modal?: boolean
-  slug?: string
-}> = ({ modal = false, slug = 'create-account' }) => {
+// Create a separate component that uses useSearchParams
+function CreateAccountForm({ modal = false, slug = 'create-account' }) {
   const searchParams = useSearchParams()
   const allParams = searchParams.toString() ? `?${searchParams.toString()}` : ''
   const { login, user } = useAuth()
@@ -186,5 +184,17 @@ export const CreateAccount: React.FC<{
 
       {error && <div className="py-2 text-red-700 text-sm">{error}</div>}
     </form>
+  )
+}
+
+// Main component with Suspense
+export const CreateAccount: React.FC<{
+  modal?: boolean
+  slug?: string
+}> = (props) => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CreateAccountForm {...props} />
+    </Suspense>
   )
 }

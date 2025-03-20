@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, Suspense } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
@@ -13,10 +13,9 @@ const EMAIL_REGEX = /\S+@\S+\.\S+/
 type FormData = {
   email: string
 }
-export const RecoverPassword: React.FC<{
-  modal?: boolean
-  slug?: string
-}> = ({ modal = false, slug = 'recover-password' }) => {
+
+// Create a separate component that uses useSearchParams
+function RecoverPasswordForm({ modal = false, slug = 'recover-password' }) {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
 
@@ -119,5 +118,17 @@ export const RecoverPassword: React.FC<{
         </React.Fragment>
       )}
     </React.Fragment>
+  )
+}
+
+// Main component with Suspense
+export const RecoverPassword: React.FC<{
+  modal?: boolean
+  slug?: string
+}> = (props) => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RecoverPasswordForm {...props} />
+    </Suspense>
   )
 }

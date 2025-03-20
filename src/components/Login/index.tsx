@@ -7,7 +7,7 @@ import { useAuth } from '@/providers/Auth'
 // import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import React, { useCallback, useRef } from 'react'
+import React, { Suspense, useCallback, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
 const EMAIL_REGEX = /\S+@\S+\.\S+/
@@ -17,14 +17,14 @@ type FormData = {
   password: string
 }
 
-export const Login: React.FC<{
-  slug?: string
-}> = ({ slug = 'login' }) => {
+// Create a separate component that uses useSearchParams
+function LoginForm({ slug = 'login' }) {
   const searchParams = useSearchParams()
   const redirect = useRef(searchParams.get('redirect'))
   const { login, user } = useAuth()
   const router = useRouter()
   const [error, setError] = React.useState<string | null>(null)
+
   if (user) {
     router.push(
       `/account?warning=${encodeURIComponent('You are already logged in.')}`,
@@ -50,6 +50,7 @@ export const Login: React.FC<{
     },
     [login, router],
   )
+
   React.useEffect(() => {
     if (slug === 'login') {
       setFocus('email')
@@ -133,5 +134,16 @@ export const Login: React.FC<{
 
       {error && <div className="py-2 text-red-700 text-sm">{error}</div>}
     </form>
+  )
+}
+
+// Main component with Suspense
+export const Login: React.FC<{
+  slug?: string
+}> = ({ slug = 'login' }) => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginForm slug={slug} />
+    </Suspense>
   )
 }

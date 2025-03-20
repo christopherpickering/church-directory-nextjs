@@ -63,11 +63,11 @@ export default function Modal({ slug }: Args) {
         >
           <CarouselContent>
             <CarouselItem>
-              <DialogTitle className="hidden">{'login.login'}</DialogTitle>
+              <DialogTitle className="hidden">{'Login'}</DialogTitle>
               <DialogDescription className="hidden">
-                {'login.loginDescription'}
+                {'Enter email to login to your account.'}
               </DialogDescription>
-              <Login modal={true} slug={slug} />
+              <Login slug={slug} />
             </CarouselItem>
             <CarouselItem>
               <DialogTitle className="hidden">
