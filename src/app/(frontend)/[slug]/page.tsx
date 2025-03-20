@@ -1,15 +1,12 @@
 import type { Metadata } from 'next'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
-import { homeStatic } from '@/endpoints/seed/home-static'
 import configPromise from '@payload-config'
 import { draftMode } from 'next/headers'
-import { type RequiredDataFromCollectionSlug, getPayload } from 'payload'
+import { getPayload } from 'payload'
 import { cache } from 'react'
 
-import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import DashboardLayout from '../components/dashboard-layout'
 import MapView from '../components/map-view'
@@ -49,22 +46,13 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { slug = 'home' } = await paramsPromise
   const url = `/${slug}`
 
-  let page: RequiredDataFromCollectionSlug<'pages'> | null
-
-  page = await queryPageBySlug({
+  const page = await queryPageBySlug({
     slug,
   })
-
-  // Remove this code once your website is seeded
-  if (!page && slug === 'home') {
-    page = homeStatic
-  }
 
   if (!page) {
     return <PayloadRedirects url={url} />
   }
-
-  const { hero, layout } = page
 
   return (
     <article className="pt-16 pb-24">
@@ -77,9 +65,6 @@ export default async function Page({ params: paramsPromise }: Args) {
       </DashboardLayout>
 
       {draft && <LivePreviewListener />}
-
-      <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
     </article>
   )
 }
