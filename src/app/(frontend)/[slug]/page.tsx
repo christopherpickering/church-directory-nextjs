@@ -1,12 +1,12 @@
-import DashboardLayout from '../components/dashboard-layout'
+import AuthenticatedLayout from '../components/authenticated-layout'
 import MapView from '../components/map-view'
 
-export default async function Page() {
+export default function Page() {
   return (
     <article className="pt-16 pb-24">
-      <DashboardLayout>
+      <AuthenticatedLayout>
         <MapView />
-      </DashboardLayout>
+      </AuthenticatedLayout>
     </article>
   )
 }
