@@ -1,7 +1,7 @@
 'use client'
 
-import Navigation from '@/app/(frontend)/components/navigation'
-import SearchHeader from '@/app/(frontend)/components/search-header'
+import Navigation from '@/components/Nav/navigation'
+import SearchHeader from '@/components/SearchHeader/search-header'
 import type * as React from 'react'
 
 interface DashboardLayoutProps {
@@ -11,7 +11,7 @@ interface DashboardLayoutProps {
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col">
-      <SearchHeader />
+      <SearchHeader isLoggedIn={true} />
       <Navigation />
       <main className="container mx-auto flex-1 p-4">{children}</main>
     </div>

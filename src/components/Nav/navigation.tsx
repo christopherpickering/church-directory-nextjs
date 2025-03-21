@@ -103,7 +103,7 @@ interface NavItemProps {
   className?: string
 }
 
-function NavItem({
+export function NavItem({
   href,
   children,
   active = false,
@@ -121,7 +121,7 @@ function NavItem({
   )
 }
 
-interface NavIconItemProps {
+export interface NavIconItemProps {
   href: string
   icon: React.ReactNode
   label: string
@@ -130,7 +130,7 @@ interface NavIconItemProps {
   onClick?: () => void
 }
 
-function NavIconItem({
+export function NavIconItem({
   href,
   icon,
   label,

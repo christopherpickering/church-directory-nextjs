@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -16,9 +18,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { addressData } from '../lib/data'
+import type { Address as AddressType } from '@/payload-types'
 
-export default function ListView() {
+export default function ListView({ addresses }: { addresses: AddressType[] }) {
+  if (!addresses) {
+    return <div>No addresses found</div>
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
@@ -26,7 +32,7 @@ export default function ListView() {
           className="w-full"
           placeholder="Search by location, zip code, ..."
         />
-        <Button className="w-full sm:w-auto">Seek</Button>
+        <Button className="w-full sm:w-auto">Search</Button>
       </div>
 
       <div className="overflow-x-auto rounded-md border">
@@ -38,12 +44,22 @@ export default function ListView() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {addressData.map((address) => (
-              <TableRow key={`${address.code}-${address.location}`}>
-                <TableCell className="font-medium">{address.code}</TableCell>
-                <TableCell>{address.location}</TableCell>
+            {addresses.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={2} className="text-center">
+                  No addresses found
+                </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              addresses.map((address) => (
+                <TableRow key={`${address.postalCode}-${address.city}`}>
+                  <TableCell className="font-medium">
+                    {address.postalCode}
+                  </TableCell>
+                  <TableCell>{address.city}</TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

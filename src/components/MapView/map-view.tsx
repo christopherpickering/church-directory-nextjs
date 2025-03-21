@@ -1,4 +1,4 @@
-import ListView from '@/app/(frontend)/components/list-view'
+import ListView from '@/components/ListView/list-view'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { MapPin } from 'lucide-react'
 
