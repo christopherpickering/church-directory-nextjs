@@ -69,6 +69,9 @@ export interface Config {
     pages: Page
     media: Media
     users: User
+    church: Church
+    address: Address
+    person: Person
     search: Search
     'payload-jobs': PayloadJob
     'payload-locked-documents': PayloadLockedDocument
@@ -80,6 +83,9 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>
     media: MediaSelect<false> | MediaSelect<true>
     users: UsersSelect<false> | UsersSelect<true>
+    church: ChurchSelect<false> | ChurchSelect<true>
+    address: AddressSelect<false> | AddressSelect<true>
+    person: PersonSelect<false> | PersonSelect<true>
     search: SearchSelect<false> | SearchSelect<true>
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>
     'payload-locked-documents':
@@ -262,6 +268,51 @@ export interface User {
   password?: string | null
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "church".
+ */
+export interface Church {
+  id: number
+  name: string
+  address: number | Address
+  email: string
+  website?: string | null
+  description?: string | null
+  updatedAt: string
+  createdAt: string
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "address".
+ */
+export interface Address {
+  id: number
+  fullName: string
+  country: string
+  addressLine1: string
+  addressLine2?: string | null
+  city?: string | null
+  state?: string | null
+  postalCode?: string | null
+  phone: string
+  updatedAt: string
+  createdAt: string
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "person".
+ */
+export interface Person {
+  id: number
+  fullName: string
+  email: string
+  address: number | Address
+  affiliatedChurch: number | Church
+  notes?: string | null
+  updatedAt: string
+  createdAt: string
+}
+/**
  * This is a collection of automatically created search results. These results are used by the global site search and will be updated automatically as documents in the CMS are created or updated.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -394,6 +445,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users'
         value: number | User
+      } | null)
+    | ({
+        relationTo: 'church'
+        value: number | Church
+      } | null)
+    | ({
+        relationTo: 'address'
+        value: number | Address
+      } | null)
+    | ({
+        relationTo: 'person'
+        value: number | Person
       } | null)
     | ({
         relationTo: 'search'
@@ -567,6 +630,48 @@ export interface UsersSelect<T extends boolean = true> {
   hash?: T
   loginAttempts?: T
   lockUntil?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "church_select".
+ */
+export interface ChurchSelect<T extends boolean = true> {
+  name?: T
+  address?: T
+  email?: T
+  website?: T
+  description?: T
+  updatedAt?: T
+  createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "address_select".
+ */
+export interface AddressSelect<T extends boolean = true> {
+  fullName?: T
+  country?: T
+  addressLine1?: T
+  addressLine2?: T
+  city?: T
+  state?: T
+  postalCode?: T
+  phone?: T
+  updatedAt?: T
+  createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "person_select".
+ */
+export interface PersonSelect<T extends boolean = true> {
+  fullName?: T
+  email?: T
+  address?: T
+  affiliatedChurch?: T
+  notes?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

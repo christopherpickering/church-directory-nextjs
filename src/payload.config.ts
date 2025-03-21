@@ -16,6 +16,9 @@ import { getServerSideURL } from './utilities/getURL'
 
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import invariant from 'tiny-invariant'
+import { Address } from './collections/Address'
+import { Church } from './collections/Church'
+import { Person } from './collections/Person'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -63,7 +66,7 @@ export default buildConfig({
     },
   }),
   // database-adapter-config-end
-  collections: [Pages, Media, Users],
+  collections: [Pages, Media, Users, Church, Address, Person],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [...plugins],
