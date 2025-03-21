@@ -36,7 +36,7 @@ function useClickableCard<T extends HTMLElement>({
       if (e.target) {
         const target = e.target as Element
 
-        const timeNow = +new Date()
+        const timeNow = Date.now()
         const parent = target?.closest('a')
 
         pressedButton.current = e.button
@@ -56,11 +56,15 @@ function useClickableCard<T extends HTMLElement>({
   const handleMouseUp = useCallback(
     (e: MouseEvent) => {
       if (link.current?.href) {
-        const timeNow = +new Date()
+        const timeNow = Date.now()
         const difference = timeNow - timeDown.current
 
         if (link.current?.href && difference <= 250) {
-          if (!hasActiveParent.current && pressedButton.current === 0 && !e.ctrlKey) {
+          if (
+            !hasActiveParent.current &&
+            pressedButton.current === 0 &&
+            !e.ctrlKey
+          ) {
             if (external) {
               const target = newTab ? '_blank' : '_self'
               window.open(link.current.href, target)

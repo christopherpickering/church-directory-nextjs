@@ -1,7 +1,8 @@
 'use client'
 
 import { cn } from '@/utilities/ui'
-import React, { useEffect, useRef } from 'react'
+import type React from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 import type { Props as MediaProps } from '../types'
 
@@ -23,6 +24,18 @@ export const VideoMedia: React.FC<MediaProps> = (props) => {
     }
   }, [])
 
+  const handleKeyPress = useCallback((event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      if (videoRef.current) {
+        if (videoRef.current.paused) {
+          videoRef.current.play()
+        } else {
+          videoRef.current.pause()
+        }
+      }
+    }
+  }, [])
+
   if (resource && typeof resource === 'object') {
     const { filename } = resource
 
@@ -36,6 +49,8 @@ export const VideoMedia: React.FC<MediaProps> = (props) => {
         onClick={onClick}
         playsInline
         ref={videoRef}
+        onKeyDown={handleKeyPress}
+        tabIndex={0}
       >
         <source src={`${getClientSideURL()}/media/${filename}`} />
       </video>

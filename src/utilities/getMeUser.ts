@@ -31,13 +31,13 @@ export const getMeUser = async (args?: {
     redirect(validUserRedirect)
   }
 
-  if (nullUserRedirect && (!meUserReq.ok || !user)) {
+  if (nullUserRedirect && !(meUserReq.ok && user)) {
     redirect(nullUserRedirect)
   }
 
   // Token will exist here because if it doesn't the user will be redirected
   return {
-    token: token!,
+    token: token || '',
     user,
   }
 }

@@ -1,0 +1,32 @@
+{
+  "extends": ["config:best-practices", ":automergeAll", "group:recommended"],
+  "recreateWhen": "auto",
+  "baseBranches": ["dev"],
+  "prHourlyLimit": 20,
+  "prConcurrentLimit": 20,
+  "ignoreDeps": ["prettier"],
+  "packageRules": [
+    {
+      "groupName": "all digest updates",
+      "groupSlug": "all-digest",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["digest"]
+    },
+    {
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "matchSourceUrls": ["https://github.com/payloadcms/payload"],
+      "groupName": "payloadcms monorepo",
+      "matchUpdateTypes": ["digest", "patch", "minor", "major"]
+    },
+    {
+      "matchSourceUrls": ["https://github.com/radix-ui/primitives"],
+      "groupName": "radix-ui-primitives monorepo",
+      "matchUpdateTypes": ["digest", "patch", "minor", "major"]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { Field } from 'payload'
+import type { Field } from 'payload'
 
 export const searchFields: Field[] = [
   {
@@ -33,28 +33,6 @@ export const searchFields: Field[] = [
         label: 'Image',
         type: 'upload',
         relationTo: 'media',
-      },
-    ],
-  },
-  {
-    label: 'Categories',
-    name: 'categories',
-    type: 'array',
-    admin: {
-      readOnly: true,
-    },
-    fields: [
-      {
-        name: 'relationTo',
-        type: 'text',
-      },
-      {
-        name: 'id',
-        type: 'text',
-      },
-      {
-        name: 'title',
-        type: 'text',
       },
     ],
   },
