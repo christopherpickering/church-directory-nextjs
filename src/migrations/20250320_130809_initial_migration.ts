@@ -1,15 +1,52 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+  // First check if enum types already exist and only create them if they don't
+  try {
+    await db.execute(sql`
+      DO $$ 
+      BEGIN
+        -- Check if the enum_pages_status type exists first
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'enum_pages_status') THEN
+          CREATE TYPE "public"."enum_pages_status" AS ENUM('draft', 'published');
+        END IF;
+        
+        -- Check each enum type before creating
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'enum__pages_v_version_status') THEN
+          CREATE TYPE "public"."enum__pages_v_version_status" AS ENUM('draft', 'published');
+        END IF;
+        
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'enum_users_role') THEN
+          CREATE TYPE "public"."enum_users_role" AS ENUM('admin', 'user');
+        END IF;
+        
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'enum_payload_jobs_log_task_slug') THEN
+          CREATE TYPE "public"."enum_payload_jobs_log_task_slug" AS ENUM('inline', 'schedulePublish');
+        END IF;
+        
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'enum_payload_jobs_log_state') THEN
+          CREATE TYPE "public"."enum_payload_jobs_log_state" AS ENUM('failed', 'succeeded');
+        END IF;
+        
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'enum_payload_jobs_task_slug') THEN
+          CREATE TYPE "public"."enum_payload_jobs_task_slug" AS ENUM('inline', 'schedulePublish');
+        END IF;
+        
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'enum_header_nav_items_link_type') THEN
+          CREATE TYPE "public"."enum_header_nav_items_link_type" AS ENUM('reference', 'custom');
+        END IF;
+        
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'enum_footer_nav_items_link_type') THEN
+          CREATE TYPE "public"."enum_footer_nav_items_link_type" AS ENUM('reference', 'custom');
+        END IF;
+      END $$;
+    `)
+  } catch (error) {
+    console.error('Error checking/creating enums:', error)
+  }
+
+  // Continue with the rest of the migration (tables, etc.)
   await db.execute(sql`
-   CREATE TYPE "public"."enum_pages_status" AS ENUM('draft', 'published');
-  CREATE TYPE "public"."enum__pages_v_version_status" AS ENUM('draft', 'published');
-  CREATE TYPE "public"."enum_users_role" AS ENUM('admin', 'user');
-  CREATE TYPE "public"."enum_payload_jobs_log_task_slug" AS ENUM('inline', 'schedulePublish');
-  CREATE TYPE "public"."enum_payload_jobs_log_state" AS ENUM('failed', 'succeeded');
-  CREATE TYPE "public"."enum_payload_jobs_task_slug" AS ENUM('inline', 'schedulePublish');
-  CREATE TYPE "public"."enum_header_nav_items_link_type" AS ENUM('reference', 'custom');
-  CREATE TYPE "public"."enum_footer_nav_items_link_type" AS ENUM('reference', 'custom');
   CREATE TABLE IF NOT EXISTS "pages" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"title" varchar,

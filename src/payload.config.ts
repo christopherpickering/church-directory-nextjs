@@ -16,9 +16,11 @@ import { getServerSideURL } from './utilities/getURL'
 
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import invariant from 'tiny-invariant'
-import { Address } from './collections/Address'
-import { Church } from './collections/Church'
-import { Person } from './collections/Person'
+import { Contacts } from './collections/Contact'
+import { ContactSubmissions } from './collections/ContactSubmissions'
+import { History } from './collections/History'
+import { Locations } from './collections/Location'
+import { seedLocationsAndContacts } from './utilities/seedLocationsAndContacts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -66,7 +68,15 @@ export default buildConfig({
     },
   }),
   // database-adapter-config-end
-  collections: [Pages, Media, Users, Church, Address, Person],
+  collections: [
+    Pages,
+    Media,
+    Users,
+    Locations,
+    Contacts,
+    History,
+    ContactSubmissions,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [...plugins],
@@ -74,6 +84,10 @@ export default buildConfig({
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
+  },
+  // Add onInit hook to seed data during initialization
+  onInit: async (payload) => {
+    await seedLocationsAndContacts(payload)
   },
   jobs: {
     access: {

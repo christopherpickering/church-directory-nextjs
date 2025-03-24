@@ -1,5 +1,5 @@
 {
-  "id": "ffc44dbd-876d-452a-b4a6-28393de3edb5",
+  "id": "605b63ff-86c9-4d0d-959e-78c03b4ce9c7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -1014,8 +1014,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.church": {
-      "name": "church",
+    "public.locations": {
+      "name": "locations",
       "schema": "",
       "columns": {
         "id": {
@@ -1030,27 +1030,102 @@
           "primaryKey": false,
           "notNull": true
         },
-        "address_id": {
-          "name": "address_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "email": {
-          "name": "email",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
         "website": {
           "name": "website",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },
-        "description": {
-          "name": "description",
+        "email": {
+          "name": "email",
           "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_country": {
+          "name": "address_country",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'USA'"
+        },
+        "address_address_line1": {
+          "name": "address_address_line1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address_address_line2": {
+          "name": "address_address_line2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_postal_code": {
+          "name": "address_postal_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_city": {
+          "name": "address_city",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_state": {
+          "name": "address_state",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_phone": {
+          "name": "address_phone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address_latitude": {
+          "name": "address_latitude",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_longitude": {
+          "name": "address_longitude",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_geocoding_status": {
+          "name": "address_geocoding_status",
+          "type": "enum_locations_address_geocoding_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'not_geocoded'"
+        },
+        "address_last_geocoded_at": {
+          "name": "address_last_geocoded_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule": {
+          "name": "schedule",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         },
@@ -1070,23 +1145,8 @@
         }
       },
       "indexes": {
-        "church_address_idx": {
-          "name": "church_address_idx",
-          "columns": [
-            {
-              "expression": "address_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "church_updated_at_idx": {
-          "name": "church_updated_at_idx",
+        "locations_updated_at_idx": {
+          "name": "locations_updated_at_idx",
           "columns": [
             {
               "expression": "updated_at",
@@ -1100,134 +1160,8 @@
           "method": "btree",
           "with": {}
         },
-        "church_created_at_idx": {
-          "name": "church_created_at_idx",
-          "columns": [
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "church_address_id_address_id_fk": {
-          "name": "church_address_id_address_id_fk",
-          "tableFrom": "church",
-          "tableTo": "address",
-          "columnsFrom": [
-            "address_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.address": {
-      "name": "address",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "full_name": {
-          "name": "full_name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "country": {
-          "name": "country",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "address_line1": {
-          "name": "address_line1",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "address_line2": {
-          "name": "address_line2",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "city": {
-          "name": "city",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "state": {
-          "name": "state",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "postal_code": {
-          "name": "postal_code",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "phone": {
-          "name": "phone",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "address_updated_at_idx": {
-          "name": "address_updated_at_idx",
-          "columns": [
-            {
-              "expression": "updated_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "address_created_at_idx": {
-          "name": "address_created_at_idx",
+        "locations_created_at_idx": {
+          "name": "locations_created_at_idx",
           "columns": [
             {
               "expression": "created_at",
@@ -1249,8 +1183,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.person": {
-      "name": "person",
+    "public.contacts": {
+      "name": "contacts",
       "schema": "",
       "columns": {
         "id": {
@@ -1259,27 +1193,351 @@
           "primaryKey": true,
           "notNull": true
         },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "full_name": {
           "name": "full_name",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "email": {
           "name": "email",
           "type": "varchar",
           "primaryKey": false,
+          "notNull": false
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_country": {
+          "name": "address_country",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'USA'"
+        },
+        "address_address_line1": {
+          "name": "address_address_line1",
+          "type": "varchar",
+          "primaryKey": false,
           "notNull": true
         },
-        "address_id": {
-          "name": "address_id",
+        "address_address_line2": {
+          "name": "address_address_line2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_postal_code": {
+          "name": "address_postal_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_city": {
+          "name": "address_city",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_state": {
+          "name": "address_state",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_phone": {
+          "name": "address_phone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address_latitude": {
+          "name": "address_latitude",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_longitude": {
+          "name": "address_longitude",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address_geocoding_status": {
+          "name": "address_geocoding_status",
+          "type": "enum_contacts_address_geocoding_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'not_geocoded'"
+        },
+        "address_last_geocoded_at": {
+          "name": "address_last_geocoded_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location_id": {
+          "name": "location_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "contacts_location_idx": {
+          "name": "contacts_location_idx",
+          "columns": [
+            {
+              "expression": "location_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "contacts_updated_at_idx": {
+          "name": "contacts_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "contacts_created_at_idx": {
+          "name": "contacts_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "contacts_location_id_locations_id_fk": {
+          "name": "contacts_location_id_locations_id_fk",
+          "tableFrom": "contacts",
+          "tableTo": "locations",
+          "columnsFrom": [
+            "location_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.history_changed_fields": {
+      "name": "history_changed_fields",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "affiliated_church_id": {
-          "name": "affiliated_church_id",
+        "_parent_id": {
+          "name": "_parent_id",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "field_name": {
+          "name": "field_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "old_value": {
+          "name": "old_value",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "new_value": {
+          "name": "new_value",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "history_changed_fields_order_idx": {
+          "name": "history_changed_fields_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "history_changed_fields_parent_id_idx": {
+          "name": "history_changed_fields_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "history_changed_fields_parent_id_fk": {
+          "name": "history_changed_fields_parent_id_fk",
+          "tableFrom": "history_changed_fields",
+          "tableTo": "history",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.history": {
+      "name": "history",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entity_type": {
+          "name": "entity_type",
+          "type": "enum_history_entity_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entity_id": {
+          "name": "entity_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "location_id": {
+          "name": "location_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contact_id": {
+          "name": "contact_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "previous_data": {
+          "name": "previous_data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "new_data": {
+          "name": "new_data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "change_type": {
+          "name": "change_type",
+          "type": "enum_history_change_type",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -1305,11 +1563,11 @@
         }
       },
       "indexes": {
-        "person_address_idx": {
-          "name": "person_address_idx",
+        "history_location_idx": {
+          "name": "history_location_idx",
           "columns": [
             {
-              "expression": "address_id",
+              "expression": "location_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -1320,11 +1578,11 @@
           "method": "btree",
           "with": {}
         },
-        "person_affiliated_church_idx": {
-          "name": "person_affiliated_church_idx",
+        "history_contact_idx": {
+          "name": "history_contact_idx",
           "columns": [
             {
-              "expression": "affiliated_church_id",
+              "expression": "contact_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -1335,8 +1593,8 @@
           "method": "btree",
           "with": {}
         },
-        "person_updated_at_idx": {
-          "name": "person_updated_at_idx",
+        "history_updated_at_idx": {
+          "name": "history_updated_at_idx",
           "columns": [
             {
               "expression": "updated_at",
@@ -1350,8 +1608,8 @@
           "method": "btree",
           "with": {}
         },
-        "person_created_at_idx": {
-          "name": "person_created_at_idx",
+        "history_created_at_idx": {
+          "name": "history_created_at_idx",
           "columns": [
             {
               "expression": "created_at",
@@ -1367,12 +1625,12 @@
         }
       },
       "foreignKeys": {
-        "person_address_id_address_id_fk": {
-          "name": "person_address_id_address_id_fk",
-          "tableFrom": "person",
-          "tableTo": "address",
+        "history_location_id_locations_id_fk": {
+          "name": "history_location_id_locations_id_fk",
+          "tableFrom": "history",
+          "tableTo": "locations",
           "columnsFrom": [
-            "address_id"
+            "location_id"
           ],
           "columnsTo": [
             "id"
@@ -1380,12 +1638,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "person_affiliated_church_id_church_id_fk": {
-          "name": "person_affiliated_church_id_church_id_fk",
-          "tableFrom": "person",
-          "tableTo": "church",
+        "history_contact_id_contacts_id_fk": {
+          "name": "history_contact_id_contacts_id_fk",
+          "tableFrom": "history",
+          "tableTo": "contacts",
           "columnsFrom": [
-            "affiliated_church_id"
+            "contact_id"
           ],
           "columnsTo": [
             "id"
@@ -1394,6 +1652,108 @@
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.contact_submissions": {
+      "name": "contact_submissions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "regarding": {
+          "name": "regarding",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "message": {
+          "name": "message",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "enum_contact_submissions_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'new'"
+        },
+        "notes": {
+          "name": "notes",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "contact_submissions_updated_at_idx": {
+          "name": "contact_submissions_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "contact_submissions_created_at_idx": {
+          "name": "contact_submissions_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -2160,20 +2520,26 @@
           "primaryKey": false,
           "notNull": false
         },
-        "church_id": {
-          "name": "church_id",
+        "locations_id": {
+          "name": "locations_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "address_id": {
-          "name": "address_id",
+        "contacts_id": {
+          "name": "contacts_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "person_id": {
-          "name": "person_id",
+        "history_id": {
+          "name": "history_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contact_submissions_id": {
+          "name": "contact_submissions_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -2282,11 +2648,11 @@
           "method": "btree",
           "with": {}
         },
-        "payload_locked_documents_rels_church_id_idx": {
-          "name": "payload_locked_documents_rels_church_id_idx",
+        "payload_locked_documents_rels_locations_id_idx": {
+          "name": "payload_locked_documents_rels_locations_id_idx",
           "columns": [
             {
-              "expression": "church_id",
+              "expression": "locations_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -2297,11 +2663,11 @@
           "method": "btree",
           "with": {}
         },
-        "payload_locked_documents_rels_address_id_idx": {
-          "name": "payload_locked_documents_rels_address_id_idx",
+        "payload_locked_documents_rels_contacts_id_idx": {
+          "name": "payload_locked_documents_rels_contacts_id_idx",
           "columns": [
             {
-              "expression": "address_id",
+              "expression": "contacts_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -2312,11 +2678,26 @@
           "method": "btree",
           "with": {}
         },
-        "payload_locked_documents_rels_person_id_idx": {
-          "name": "payload_locked_documents_rels_person_id_idx",
+        "payload_locked_documents_rels_history_id_idx": {
+          "name": "payload_locked_documents_rels_history_id_idx",
           "columns": [
             {
-              "expression": "person_id",
+              "expression": "history_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_contact_submissions_id_idx": {
+          "name": "payload_locked_documents_rels_contact_submissions_id_idx",
+          "columns": [
+            {
+              "expression": "contact_submissions_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -2411,12 +2792,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "payload_locked_documents_rels_church_fk": {
-          "name": "payload_locked_documents_rels_church_fk",
+        "payload_locked_documents_rels_locations_fk": {
+          "name": "payload_locked_documents_rels_locations_fk",
           "tableFrom": "payload_locked_documents_rels",
-          "tableTo": "church",
+          "tableTo": "locations",
           "columnsFrom": [
-            "church_id"
+            "locations_id"
           ],
           "columnsTo": [
             "id"
@@ -2424,12 +2805,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "payload_locked_documents_rels_address_fk": {
-          "name": "payload_locked_documents_rels_address_fk",
+        "payload_locked_documents_rels_contacts_fk": {
+          "name": "payload_locked_documents_rels_contacts_fk",
           "tableFrom": "payload_locked_documents_rels",
-          "tableTo": "address",
+          "tableTo": "contacts",
           "columnsFrom": [
-            "address_id"
+            "contacts_id"
           ],
           "columnsTo": [
             "id"
@@ -2437,12 +2818,25 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "payload_locked_documents_rels_person_fk": {
-          "name": "payload_locked_documents_rels_person_fk",
+        "payload_locked_documents_rels_history_fk": {
+          "name": "payload_locked_documents_rels_history_fk",
           "tableFrom": "payload_locked_documents_rels",
-          "tableTo": "person",
+          "tableTo": "history",
           "columnsFrom": [
-            "person_id"
+            "history_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_contact_submissions_fk": {
+          "name": "payload_locked_documents_rels_contact_submissions_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "contact_submissions",
+          "columnsFrom": [
+            "contact_submissions_id"
           ],
           "columnsTo": [
             "id"
@@ -3333,6 +3727,50 @@
       "values": [
         "admin",
         "user"
+      ]
+    },
+    "public.enum_locations_address_geocoding_status": {
+      "name": "enum_locations_address_geocoding_status",
+      "schema": "public",
+      "values": [
+        "not_geocoded",
+        "success",
+        "failed"
+      ]
+    },
+    "public.enum_contacts_address_geocoding_status": {
+      "name": "enum_contacts_address_geocoding_status",
+      "schema": "public",
+      "values": [
+        "not_geocoded",
+        "success",
+        "failed"
+      ]
+    },
+    "public.enum_history_entity_type": {
+      "name": "enum_history_entity_type",
+      "schema": "public",
+      "values": [
+        "location",
+        "contact"
+      ]
+    },
+    "public.enum_history_change_type": {
+      "name": "enum_history_change_type",
+      "schema": "public",
+      "values": [
+        "create",
+        "update",
+        "delete"
+      ]
+    },
+    "public.enum_contact_submissions_status": {
+      "name": "enum_contact_submissions_status",
+      "schema": "public",
+      "values": [
+        "new",
+        "inProgress",
+        "resolved"
       ]
     },
     "public.enum_payload_jobs_log_task_slug": {

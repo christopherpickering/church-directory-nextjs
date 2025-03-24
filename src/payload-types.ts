@@ -69,9 +69,10 @@ export interface Config {
     pages: Page
     media: Media
     users: User
-    church: Church
-    address: Address
-    person: Person
+    locations: Location
+    contacts: Contact
+    history: History
+    'contact-submissions': ContactSubmission
     search: Search
     'payload-jobs': PayloadJob
     'payload-locked-documents': PayloadLockedDocument
@@ -83,9 +84,12 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>
     media: MediaSelect<false> | MediaSelect<true>
     users: UsersSelect<false> | UsersSelect<true>
-    church: ChurchSelect<false> | ChurchSelect<true>
-    address: AddressSelect<false> | AddressSelect<true>
-    person: PersonSelect<false> | PersonSelect<true>
+    locations: LocationsSelect<false> | LocationsSelect<true>
+    contacts: ContactsSelect<false> | ContactsSelect<true>
+    history: HistorySelect<false> | HistorySelect<true>
+    'contact-submissions':
+      | ContactSubmissionsSelect<false>
+      | ContactSubmissionsSelect<true>
     search: SearchSelect<false> | SearchSelect<true>
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>
     'payload-locked-documents':
@@ -269,45 +273,221 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "church".
+ * via the `definition` "locations".
  */
-export interface Church {
+export interface Location {
   id: number
   name: string
-  address: number | Address
-  email: string
+  /**
+   * Church website URL
+   */
   website?: string | null
-  description?: string | null
+  /**
+   * Main contact email
+   */
+  email?: string | null
+  /**
+   * Main contact phone number
+   */
+  phoneNumber?: string | null
+  address: {
+    country?: string | null
+    addressLine1: string
+    addressLine2?: string | null
+    postalCode?: string | null
+    city?: string | null
+    state?: string | null
+    phone: string
+    /**
+     * Automatically populated when address is saved
+     */
+    latitude?: number | null
+    /**
+     * Automatically populated when address is saved
+     */
+    longitude?: number | null
+    geocodingStatus?:
+      | ('not_geocoded' | 'geocoding' | 'geocoded' | 'failed')
+      | null
+    lastGeocodedAt?: string | null
+  }
+  /**
+   * Church notes
+   */
+  notes?: {
+    root: {
+      type: string
+      children: {
+        type: string
+        version: number
+        [k: string]: unknown
+      }[]
+      direction: ('ltr' | 'rtl') | null
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+      indent: number
+      version: number
+    }
+    [k: string]: unknown
+  } | null
+  schedule?: {
+    root: {
+      type: string
+      children: {
+        type: string
+        version: number
+        [k: string]: unknown
+      }[]
+      direction: ('ltr' | 'rtl') | null
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+      indent: number
+      version: number
+    }
+    [k: string]: unknown
+  } | null
   updatedAt: string
   createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "address".
+ * via the `definition` "contacts".
  */
-export interface Address {
+export interface Contact {
   id: number
-  fullName: string
-  country: string
-  addressLine1: string
-  addressLine2?: string | null
-  city?: string | null
-  state?: string | null
-  postalCode?: string | null
-  phone: string
+  firstName: string
+  lastName?: string | null
+  fullName?: string | null
+  email?: string | null
+  phoneNumber?: string | null
+  address: {
+    country?: string | null
+    addressLine1: string
+    addressLine2?: string | null
+    postalCode?: string | null
+    city?: string | null
+    state?: string | null
+    phone: string
+    /**
+     * Automatically populated when address is saved
+     */
+    latitude?: number | null
+    /**
+     * Automatically populated when address is saved
+     */
+    longitude?: number | null
+    geocodingStatus?:
+      | ('not_geocoded' | 'geocoding' | 'geocoded' | 'failed')
+      | null
+    lastGeocodedAt?: string | null
+  }
+  /**
+   * Location this contact is associated with
+   */
+  location?: (number | null) | Location
+  /**
+   * Notes about the contact
+   */
+  notes?: {
+    root: {
+      type: string
+      children: {
+        type: string
+        version: number
+        [k: string]: unknown
+      }[]
+      direction: ('ltr' | 'rtl') | null
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+      indent: number
+      version: number
+    }
+    [k: string]: unknown
+  } | null
   updatedAt: string
   createdAt: string
 }
 /**
+ * Track changes to addresses, contacts, and meeting times
+ *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "person".
+ * via the `definition` "history".
  */
-export interface Person {
+export interface History {
   id: number
-  fullName: string
+  /**
+   * Brief description of the change
+   */
+  title: string
+  entityType: 'location' | 'contact'
+  /**
+   * ID of the entity that was changed
+   */
+  entityId: string
+  /**
+   * Link to the location that was changed
+   */
+  location?: (number | null) | Location
+  /**
+   * Link to the contact that was changed
+   */
+  contact?: (number | null) | Contact
+  /**
+   * The data before the change
+   */
+  previousData?:
+    | {
+        [k: string]: unknown
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null
+  /**
+   * The data after the change
+   */
+  newData?:
+    | {
+        [k: string]: unknown
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null
+  changeType: 'create' | 'update' | 'delete'
+  /**
+   * List of fields that were changed
+   */
+  changedFields?:
+    | {
+        fieldName: string
+        oldValue?: string | null
+        newValue?: string | null
+        id?: string | null
+      }[]
+    | null
+  /**
+   * Additional notes about this change
+   */
+  notes?: string | null
+  updatedAt: string
+  createdAt: string
+}
+/**
+ * Contact form submissions
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions".
+ */
+export interface ContactSubmission {
+  id: number
+  name: string
   email: string
-  address: number | Address
-  affiliatedChurch: number | Church
+  regarding?: string | null
+  message: string
+  status?: ('new' | 'inProgress' | 'resolved') | null
+  /**
+   * Admin notes about this submission
+   */
   notes?: string | null
   updatedAt: string
   createdAt: string
@@ -447,16 +627,20 @@ export interface PayloadLockedDocument {
         value: number | User
       } | null)
     | ({
-        relationTo: 'church'
-        value: number | Church
+        relationTo: 'locations'
+        value: number | Location
       } | null)
     | ({
-        relationTo: 'address'
-        value: number | Address
+        relationTo: 'contacts'
+        value: number | Contact
       } | null)
     | ({
-        relationTo: 'person'
-        value: number | Person
+        relationTo: 'history'
+        value: number | History
+      } | null)
+    | ({
+        relationTo: 'contact-submissions'
+        value: number | ContactSubmission
       } | null)
     | ({
         relationTo: 'search'
@@ -633,42 +817,98 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "church_select".
+ * via the `definition` "locations_select".
  */
-export interface ChurchSelect<T extends boolean = true> {
+export interface LocationsSelect<T extends boolean = true> {
   name?: T
-  address?: T
-  email?: T
   website?: T
-  description?: T
+  email?: T
+  phoneNumber?: T
+  address?:
+    | T
+    | {
+        country?: T
+        addressLine1?: T
+        addressLine2?: T
+        postalCode?: T
+        city?: T
+        state?: T
+        phone?: T
+        latitude?: T
+        longitude?: T
+        geocodingStatus?: T
+        lastGeocodedAt?: T
+      }
+  notes?: T
+  schedule?: T
   updatedAt?: T
   createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "address_select".
+ * via the `definition` "contacts_select".
  */
-export interface AddressSelect<T extends boolean = true> {
-  fullName?: T
-  country?: T
-  addressLine1?: T
-  addressLine2?: T
-  city?: T
-  state?: T
-  postalCode?: T
-  phone?: T
-  updatedAt?: T
-  createdAt?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "person_select".
- */
-export interface PersonSelect<T extends boolean = true> {
+export interface ContactsSelect<T extends boolean = true> {
+  firstName?: T
+  lastName?: T
   fullName?: T
   email?: T
-  address?: T
-  affiliatedChurch?: T
+  phoneNumber?: T
+  address?:
+    | T
+    | {
+        country?: T
+        addressLine1?: T
+        addressLine2?: T
+        postalCode?: T
+        city?: T
+        state?: T
+        phone?: T
+        latitude?: T
+        longitude?: T
+        geocodingStatus?: T
+        lastGeocodedAt?: T
+      }
+  location?: T
+  notes?: T
+  updatedAt?: T
+  createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "history_select".
+ */
+export interface HistorySelect<T extends boolean = true> {
+  title?: T
+  entityType?: T
+  entityId?: T
+  location?: T
+  contact?: T
+  previousData?: T
+  newData?: T
+  changeType?: T
+  changedFields?:
+    | T
+    | {
+        fieldName?: T
+        oldValue?: T
+        newValue?: T
+        id?: T
+      }
+  notes?: T
+  updatedAt?: T
+  createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions_select".
+ */
+export interface ContactSubmissionsSelect<T extends boolean = true> {
+  name?: T
+  email?: T
+  regarding?: T
+  message?: T
+  status?: T
   notes?: T
   updatedAt?: T
   createdAt?: T

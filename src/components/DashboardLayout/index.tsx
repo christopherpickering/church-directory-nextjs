@@ -1,7 +1,7 @@
 'use client'
 
 import Navigation from '@/components/Nav/navigation'
-import SearchHeader from '@/components/SearchHeader/search-header'
+import SearchHeader from '@/components/SearchHeader'
 import type * as React from 'react'
 
 interface DashboardLayoutProps {

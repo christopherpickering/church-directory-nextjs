@@ -1,10 +1,9 @@
 import { NavIconItem, NavItem } from '@/components/Nav/navigation'
-import SearchHeader from '@/components/SearchHeader/search-header'
+import SearchHeader from '@/components/SearchHeader'
 import { LogIn } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import type React from 'react'
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 interface LoginDashboardProps {
   children: React.ReactNode

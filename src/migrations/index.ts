@@ -1,5 +1,5 @@
 import * as migration_20250320_130809_initial_migration from './20250320_130809_initial_migration';
-import * as migration_20250321_124740_added_collections from './20250321_124740_added_collections';
+import * as migration_20250324_073034_added_address_as_a_field from './20250324_073034_added_address_as_a_field';
 
 export const migrations = [
   {
@@ -8,8 +8,8 @@ export const migrations = [
     name: '20250320_130809_initial_migration',
   },
   {
-    up: migration_20250321_124740_added_collections.up,
-    down: migration_20250321_124740_added_collections.down,
-    name: '20250321_124740_added_collections'
+    up: migration_20250324_073034_added_address_as_a_field.up,
+    down: migration_20250324_073034_added_address_as_a_field.down,
+    name: '20250324_073034_added_address_as_a_field'
   },
 ];
