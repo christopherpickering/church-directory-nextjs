@@ -1,110 +1,58 @@
-import type { Metadata } from 'next'
+import AddressSearch from '@/components/AddressSearch'
+import DashboardLayout from '@/components/DashboardLayout'
 
-import { PayloadRedirects } from '@/components/PayloadRedirects'
-import configPromise from '@payload-config'
-import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
-import { draftMode } from 'next/headers'
-import React, { cache } from 'react'
-import { homeStatic } from '@/endpoints/seed/home-static'
-
-import { RenderBlocks } from '@/blocks/RenderBlocks'
-import { RenderHero } from '@/heros/RenderHero'
-import { generateMeta } from '@/utilities/generateMeta'
-import PageClient from './page.client'
-import { LivePreviewListener } from '@/components/LivePreviewListener'
-
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const pages = await payload.find({
-    collection: 'pages',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
-
-  const params = pages.docs
-    ?.filter((doc) => {
-      return doc.slug !== 'home'
-    })
-    .map(({ slug }) => {
-      return { slug }
-    })
-
-  return params
-}
-
-type Args = {
-  params: Promise<{
-    slug?: string
-  }>
-}
-
-export default async function Page({ params: paramsPromise }: Args) {
-  const { isEnabled: draft } = await draftMode()
-  const { slug = 'home' } = await paramsPromise
-  const url = '/' + slug
-
-  let page: RequiredDataFromCollectionSlug<'pages'> | null
-
-  page = await queryPageBySlug({
-    slug,
-  })
-
-  // Remove this code once your website is seeded
-  if (!page && slug === 'home') {
-    page = homeStatic
-  }
-
-  if (!page) {
-    return <PayloadRedirects url={url} />
-  }
-
-  const { hero, layout } = page
-
+export default function SlugPage() {
   return (
-    <article className="pt-16 pb-24">
-      <PageClient />
-      {/* Allows redirects for valid pages too */}
-      <PayloadRedirects disableNotFound url={url} />
+    <div className="pt-16 pb-24">
+      <DashboardLayout>
+        <div className="mx-auto max-w-4xl space-y-8 px-4">
+          <div className="space-y-4">
+            <div className="prose max-w-none">
+              <p>
+                This directory contains congregations in{' '}
+                <span className="font-bold">Germany</span> known to gather
+                solely in the name of the Lord Jesus and to seek to realize the
+                unity of the Spirit. This directory is intended as a guide and
+                is not intended to define any particular group.
+              </p>
+              <p>
+                Publishing the directory online eliminates the time-consuming
+                task of maintaining a separate directory. Those who still want
+                to maintain a paper directory can view the changes under
+                &quot;History,&quot; which can then be transferred to the paper
+                version.
+              </p>
+              <p className="font-medium">
+                Please treat all data strictly confidential!
+              </p>
+            </div>
+          </div>
 
-      {draft && <LivePreviewListener />}
+          {/* Search and Map Section */}
+          <div className="flex flex-col items-center space-y-8 md:space-y-12">
+            {/* Search Section */}
+            <div className="w-full max-w-2xl space-y-4">
+              <h2 className="text-center font-semibold text-2xl">
+                Search address
+              </h2>
+              <AddressSearch />
+            </div>
 
-      <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
-    </article>
+            {/* Map Button */}
+            <div className="w-full max-w-2xl">
+              <a
+                href="/map"
+                className="flex w-full flex-col items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-center text-primary-foreground hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-primary sm:flex-row"
+              >
+                <span>Open map (Location)</span>
+                <span className="text-gray-200 text-sm">
+                  The map is loaded from www.openstreetmap.org
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </DashboardLayout>
+    </div>
   )
 }
-
-export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug = 'home' } = await paramsPromise
-  const page = await queryPageBySlug({
-    slug,
-  })
-
-  return generateMeta({ doc: page })
-}
-
-const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
-  const { isEnabled: draft } = await draftMode()
-
-  const payload = await getPayload({ config: configPromise })
-
-  const result = await payload.find({
-    collection: 'pages',
-    draft,
-    limit: 1,
-    pagination: false,
-    overrideAccess: draft,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
-  })
-
-  return result.docs?.[0] || null
-})

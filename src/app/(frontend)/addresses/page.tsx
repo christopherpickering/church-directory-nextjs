@@ -1,0 +1,48 @@
+import DashboardLayout from '@/components/DashboardLayout'
+import ListView from '@/components/ListView'
+import { getAddresses } from '@/utilities/getAddresses'
+
+export default async function AddressesPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | undefined>>
+}) {
+  const resolvedSearchParams = await searchParams
+  const searchQuery = resolvedSearchParams.search?.toLowerCase()
+  const addresses = await getAddresses()
+
+  const currentPage = Number(resolvedSearchParams.page) || 1
+  const itemsPerPage = 10
+
+  const filteredAddresses = searchQuery
+    ? addresses.filter(
+        (address) =>
+          address.addressLine1?.toLowerCase().includes(searchQuery) ||
+          address.city?.toLowerCase().includes(searchQuery) ||
+          address.state?.toLowerCase().includes(searchQuery) ||
+          address.postalCode?.toLowerCase().includes(searchQuery),
+      )
+    : addresses
+
+  const totalPages = Math.ceil(filteredAddresses.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const paginatedAddresses = filteredAddresses.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  )
+
+  return (
+    <div className="pt-16 pb-24">
+      <DashboardLayout>
+        <div className="mx-auto max-w-7xl space-y-6 px-4">
+          <ListView
+            addresses={paginatedAddresses}
+            totalPages={totalPages}
+            currentPage={currentPage}
+            searchQuery={searchQuery || ''}
+          />
+        </div>
+      </DashboardLayout>
+    </div>
+  )
+}

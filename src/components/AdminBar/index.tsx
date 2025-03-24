@@ -3,10 +3,10 @@
 import type { PayloadAdminBarProps, PayloadMeUser } from '@payloadcms/admin-bar'
 
 import { cn } from '@/utilities/ui'
-import { useSelectedLayoutSegments } from 'next/navigation'
 import { PayloadAdminBar } from '@payloadcms/admin-bar'
-import React, { useState } from 'react'
+import { useSelectedLayoutSegments } from 'next/navigation'
 import { useRouter } from 'next/navigation'
+import React, { useState } from 'react'
 
 import './index.scss'
 
@@ -18,10 +18,6 @@ const collectionLabels = {
   pages: {
     plural: 'Pages',
     singular: 'Page',
-  },
-  posts: {
-    plural: 'Posts',
-    singular: 'Post',
   },
   projects: {
     plural: 'Projects',
@@ -38,7 +34,9 @@ export const AdminBar: React.FC<{
   const segments = useSelectedLayoutSegments()
   const [show, setShow] = useState(false)
   const collection = (
-    collectionLabels[segments?.[1] as keyof typeof collectionLabels] ? segments[1] : 'pages'
+    collectionLabels[segments?.[1] as keyof typeof collectionLabels]
+      ? segments[1]
+      : 'pages'
   ) as keyof typeof collectionLabels
   const router = useRouter()
 
@@ -48,7 +46,7 @@ export const AdminBar: React.FC<{
 
   return (
     <div
-      className={cn(baseClass, 'py-2 bg-black text-white', {
+      className={cn(baseClass, 'bg-black py-2 text-white', {
         block: show,
         hidden: !show,
       })}
