@@ -20,7 +20,6 @@ import { Contacts } from './collections/Contact'
 import { ContactSubmissions } from './collections/ContactSubmissions'
 import { History } from './collections/History'
 import { Locations } from './collections/Location'
-import { seedLocationsAndContacts } from './utilities/seedLocationsAndContacts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -84,10 +83,6 @@ export default buildConfig({
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
-  },
-  // Add onInit hook to seed data during initialization
-  onInit: async (payload) => {
-    await seedLocationsAndContacts(payload)
   },
   jobs: {
     access: {
