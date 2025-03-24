@@ -1,36 +1,27 @@
+import type { AddressData } from '@/components/Maps/type'
+import type { Contact, Location } from '@/payload-types'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { geocodeAddress } from './geocodeAddress'
 
-// Define our own address data type
-interface AddressData {
-  id: string
-  street: string
-  city?: string | null
-  state?: string | null
-  zipCode?: string | null
-  country?: string | null
-  phoneNumber?: string | null
-  latitude: number
-  longitude: number
+const buildAddress = (object: Location | Contact) => {
+  return {
+    id: object.id,
+    city: object.address.city,
+    addressLine1: object.address.addressLine1,
+    addressLine2: object.address.addressLine2,
+    state: object.address.state,
+    postalCode: object.address.postalCode,
+    country: object.address.country,
+    phone: object.phoneNumber || '',
+    latitude: object.address.latitude || 0,
+    longitude: object.address.longitude || 0,
+    type:
+      object instanceof Location
+        ? 'locations'
+        : ('contacts' as 'locations' | 'contacts'),
+  }
 }
-
-// Simple function to build address string
-function buildAddress(item: any): string {
-  if (!item?.address) return ''
-
-  const { addressLine1, addressLine2, city, state, postalCode } = item.address
-  const parts = []
-
-  if (addressLine1) parts.push(addressLine1)
-  if (addressLine2) parts.push(addressLine2)
-  if (city) parts.push(city)
-  if (state) parts.push(state)
-  if (postalCode) parts.push(postalCode)
-
-  return parts.join(', ')
-}
-
 export async function getAddresses() {
   const payload = await getPayload({ config: configPromise })
   const addresses: AddressData[] = []
@@ -41,14 +32,9 @@ export async function getAddresses() {
   })
 
   for (const location of locations.docs) {
-    const street = buildAddress(location)
-
-    // Geocode the address if it hasn't been geocoded or if it failed
     if (location.address.geocodingStatus !== 'geocoded') {
       const geocodedResult = await geocodeAddress(location.address)
-
-      // Update the location with the geocoded coordinates
-      await payload.update({
+      const updatedLocation = await payload.update({
         collection: 'locations',
         id: location.id,
         data: {
@@ -58,19 +44,10 @@ export async function getAddresses() {
           },
         },
       })
+      addresses.push(buildAddress(updatedLocation))
+    } else {
+      addresses.push(buildAddress(location))
     }
-
-    addresses.push({
-      id: location.id.toString(),
-      street,
-      city: location.address.city,
-      state: location.address.state,
-      zipCode: location.address.postalCode,
-      country: location.address.country,
-      phoneNumber: location.phoneNumber,
-      latitude: location.address.latitude || 0,
-      longitude: location.address.longitude || 0,
-    })
   }
 
   const contacts = await payload.find({
@@ -79,14 +56,10 @@ export async function getAddresses() {
   })
 
   for (const contact of contacts.docs) {
-    const street = buildAddress(contact)
-
-    // Geocode the address if it hasn't been geocoded or if it failed
     if (contact.address.geocodingStatus !== 'geocoded') {
       const geocodedResult = await geocodeAddress(contact.address)
 
-      // Update the contact with the geocoded coordinates
-      await payload.update({
+      const updatedContact = await payload.update({
         collection: 'contacts',
         id: contact.id,
         data: {
@@ -96,21 +69,11 @@ export async function getAddresses() {
           },
         },
       })
+      addresses.push(buildAddress(updatedContact))
+    } else {
+      addresses.push(buildAddress(contact))
     }
-
-    addresses.push({
-      id: contact.id.toString(),
-      street,
-      city: contact.address.city,
-      state: contact.address.state,
-      zipCode: contact.address.postalCode,
-      country: contact.address.country,
-      phoneNumber: contact.phoneNumber,
-      latitude: contact.address.latitude || 0,
-      longitude: contact.address.longitude || 0,
-    })
   }
-
   return addresses
 }
 

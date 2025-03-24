@@ -28,7 +28,8 @@ export default async function AddressesPage({
           address.country?.toLowerCase().includes(searchQuery) ||
           address.city?.toLowerCase().includes(searchQuery) ||
           address.state?.toLowerCase().includes(searchQuery) ||
-          address.street?.toLowerCase().includes(searchQuery),
+          address.addressLine1?.toLowerCase().includes(searchQuery) ||
+          address.addressLine2?.toLowerCase().includes(searchQuery),
       )
     : addresses
 

@@ -1,5 +1,6 @@
 'use client'
 
+import type { AddressData } from '@/components/Maps/type'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -18,18 +19,8 @@ import {
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { type FormEvent, useState } from 'react'
-
-interface Address {
-  id: string
-  street?: string | null
-  city?: string | null
-  state?: string | null
-  zipCode?: string | null
-  phoneNumber?: string | null
-}
-
 interface ListViewProps {
-  addresses: Address[]
+  addresses: AddressData[]
   totalPages: number
   currentPage: number
   searchQuery: string
@@ -97,10 +88,10 @@ export default function ListView({
               addresses.map((address) => (
                 <TableRow key={address.id}>
                   <TableCell className="font-medium">
-                    {address.zipCode}
+                    {address.postalCode}
                   </TableCell>
                   <TableCell>
-                    {address.street}
+                    {address.state}
                     {address.city && (
                       <span className="block text-gray-500">
                         {address.city}
@@ -109,7 +100,7 @@ export default function ListView({
                   </TableCell>
                   <TableCell>{address.state}</TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {address.phoneNumber}
+                    {address.phone}
                   </TableCell>
                 </TableRow>
               ))
