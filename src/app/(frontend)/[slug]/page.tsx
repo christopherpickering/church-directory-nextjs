@@ -1,16 +1,16 @@
 import AddressSearch from '@/components/AddressSearch'
-import DashboardLayout from '@/components/DashboardLayout'
+import AuthenticatedLayout from '@/components/AuthLayout'
 
 export default function SlugPage() {
   return (
     <div className="pt-16 pb-24">
-      <DashboardLayout>
+      <AuthenticatedLayout>
         <div className="mx-auto max-w-4xl space-y-8 px-4">
           <div className="space-y-4">
             <div className="prose max-w-none">
               <p>
                 This directory contains congregations in{' '}
-                <span className="font-bold">Germany</span> known to gather
+                <span className="font-bold">Location</span> known to gather
                 solely in the name of the Lord Jesus and to seek to realize the
                 unity of the Spirit. This directory is intended as a guide and
                 is not intended to define any particular group.
@@ -52,7 +52,7 @@ export default function SlugPage() {
             </div>
           </div>
         </div>
-      </DashboardLayout>
+      </AuthenticatedLayout>
     </div>
   )
 }

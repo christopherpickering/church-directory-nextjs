@@ -1,4 +1,4 @@
-import DashboardLayout from '@/components/DashboardLayout'
+import AuthenticatedLayout from '@/components/AuthLayout'
 import ListView from '@/components/ListView'
 import { getAddresses } from '@/utilities/getAddresses'
 
@@ -33,7 +33,7 @@ export default async function AddressesPage({
 
   return (
     <div className="pt-16 pb-24">
-      <DashboardLayout>
+      <AuthenticatedLayout>
         <div className="mx-auto max-w-7xl space-y-6 px-4">
           <ListView
             addresses={paginatedAddresses}
@@ -42,7 +42,7 @@ export default async function AddressesPage({
             searchQuery={searchQuery || ''}
           />
         </div>
-      </DashboardLayout>
+      </AuthenticatedLayout>
     </div>
   )
 }
