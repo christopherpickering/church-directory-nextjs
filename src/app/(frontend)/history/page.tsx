@@ -1,11 +1,11 @@
-import DashboardLayout from '@/components/DashboardLayout'
+import AuthenticatedLayout from '@/components/AuthLayout'
 
 export default function HistoryPage() {
   return (
     <div className="pt-16 pb-24">
-      <DashboardLayout>
+      <AuthenticatedLayout>
         <div>HistoryPage</div>
-      </DashboardLayout>
+      </AuthenticatedLayout>
     </div>
   )
 }
