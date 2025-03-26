@@ -10,8 +10,6 @@ import { useRouter } from 'next/navigation'
 import React, { Suspense, useCallback, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
-const EMAIL_REGEX = /\S+@\S+\.\S+/
-
 type FormData = {
   email: string
   password: string
@@ -26,9 +24,7 @@ function LoginForm({ slug = 'login' }) {
   const [error, setError] = React.useState<string | null>(null)
 
   if (user) {
-    router.push(
-      `/account?warning=${encodeURIComponent('You are already logged in.')}`,
-    )
+    router.push(`/?warning=${encodeURIComponent('You are already logged in.')}`)
   }
 
   const {
@@ -53,7 +49,7 @@ function LoginForm({ slug = 'login' }) {
 
   React.useEffect(() => {
     if (slug === 'login') {
-      setFocus('email')
+      setFocus('password')
     }
   }, [setFocus, slug])
 
@@ -67,29 +63,6 @@ function LoginForm({ slug = 'login' }) {
       </div>
 
       <div className="flex flex-col gap-6">
-        <div className="grid gap-2">
-          <Label htmlFor="email">{'email'}</Label>
-          <Input
-            id="email"
-            type="email"
-            {...register('email', {
-              required: 'true',
-              pattern: {
-                value: EMAIL_REGEX,
-                message: 'Please enter a valid email',
-              },
-            })}
-            placeholder="m@example.com"
-            required
-          />
-          {errors.email && (
-            <div className="text-red-700 text-sm">
-              {!errors.email?.message && errors.email?.type === 'required'
-                ? 'required'
-                : errors.email?.message}
-            </div>
-          )}
-        </div>
         <div className="grid gap-2">
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
