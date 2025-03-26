@@ -14,6 +14,7 @@ type MapProps = HTMLAttributes<HTMLElement> & {
   code?: string | null
   points: {
     type: string
+    slug: string
     id: number
     name: string | null
     lat: number | null
@@ -96,7 +97,9 @@ const MultiMap = ({
               title={point.type}
             >
               <Popup>
-                <Link href={`/${point.type}/${point.id}`}>{title}</Link>
+                <Link href={`/${point.type}/${point.slug}/${point.id}`}>
+                  {title}
+                </Link>
               </Popup>
             </Marker>
           )

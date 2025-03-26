@@ -10,10 +10,6 @@ import { usePathname } from 'next/navigation'
 import { useRef } from 'react'
 import React from 'react'
 
-function getRnadomNumber() {
-  return Math.floor(Math.random() * 1000000)
-}
-
 export default function MapPageClient({
   addresses,
 }: { addresses: AddressData[] }) {
@@ -37,8 +33,9 @@ export default function MapPageClient({
       })
       .map((address) => {
         return {
-          type: 'address',
-          id: getRnadomNumber(),
+          type: 'addresses',
+          id: address.id,
+          slug: address.type,
           name: address.city || '',
           lat: address.latitude || 0,
           long: address.longitude || 0,
