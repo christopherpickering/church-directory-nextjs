@@ -2,7 +2,7 @@ version: '3'
 
 services:
   payload:
-    image: node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+    image: node:22-alpine@sha256:9bef0ef1e268f60627da9ba7d7605e8831d5b56ad07487d24d1aa386336d1944
     ports:
       - '3000:3000'
     volumes:
