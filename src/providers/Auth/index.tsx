@@ -25,7 +25,7 @@ type Create = (args: {
   passwordConfirm: string
 }) => Promise<void>
 
-type Login = (args: { email: string; password: string }) => Promise<User>
+type Login = (args: { password: string }) => Promise<User>
 
 type Logout = () => Promise<void>
 
@@ -92,7 +92,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email: process.env.NEXT_PUBLIC_ADMIN_EMAIL,
             password: args.password,
           }),
         },

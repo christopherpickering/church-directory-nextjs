@@ -71,7 +71,6 @@ export interface Config {
     users: User
     locations: Location
     contacts: Contact
-    history: History
     'contact-submissions': ContactSubmission
     search: Search
     'payload-jobs': PayloadJob
@@ -86,7 +85,6 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>
     locations: LocationsSelect<false> | LocationsSelect<true>
     contacts: ContactsSelect<false> | ContactsSelect<true>
-    history: HistorySelect<false> | HistorySelect<true>
     'contact-submissions':
       | ContactSubmissionsSelect<false>
       | ContactSubmissionsSelect<true>
@@ -405,74 +403,6 @@ export interface Contact {
   createdAt: string
 }
 /**
- * Track changes to addresses, contacts, and meeting times
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "history".
- */
-export interface History {
-  id: number
-  /**
-   * Brief description of the change
-   */
-  title: string
-  entityType: 'location' | 'contact'
-  /**
-   * ID of the entity that was changed
-   */
-  entityId: string
-  /**
-   * Link to the location that was changed
-   */
-  location?: (number | null) | Location
-  /**
-   * Link to the contact that was changed
-   */
-  contact?: (number | null) | Contact
-  /**
-   * The data before the change
-   */
-  previousData?:
-    | {
-        [k: string]: unknown
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null
-  /**
-   * The data after the change
-   */
-  newData?:
-    | {
-        [k: string]: unknown
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null
-  changeType: 'create' | 'update' | 'delete'
-  /**
-   * List of fields that were changed
-   */
-  changedFields?:
-    | {
-        fieldName: string
-        oldValue?: string | null
-        newValue?: string | null
-        id?: string | null
-      }[]
-    | null
-  /**
-   * Additional notes about this change
-   */
-  notes?: string | null
-  updatedAt: string
-  createdAt: string
-}
-/**
  * Contact form submissions
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -633,10 +563,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'contacts'
         value: number | Contact
-      } | null)
-    | ({
-        relationTo: 'history'
-        value: number | History
       } | null)
     | ({
         relationTo: 'contact-submissions'
@@ -870,31 +796,6 @@ export interface ContactsSelect<T extends boolean = true> {
         lastGeocodedAt?: T
       }
   location?: T
-  notes?: T
-  updatedAt?: T
-  createdAt?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "history_select".
- */
-export interface HistorySelect<T extends boolean = true> {
-  title?: T
-  entityType?: T
-  entityId?: T
-  location?: T
-  contact?: T
-  previousData?: T
-  newData?: T
-  changeType?: T
-  changedFields?:
-    | T
-    | {
-        fieldName?: T
-        oldValue?: T
-        newValue?: T
-        id?: T
-      }
   notes?: T
   updatedAt?: T
   createdAt?: T

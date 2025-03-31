@@ -9,10 +9,8 @@ import type React from 'react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-// Move regex to top level
 const EMAIL_REGEX = /\S+@\S+\.\S+/
 
-// Define the form data type
 type ContactFormData = {
   name: string
   email: string
