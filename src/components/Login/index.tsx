@@ -11,7 +11,6 @@ import React, { Suspense, useCallback, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
 type FormData = {
-  email: string
   password: string
 }
 
@@ -39,7 +38,7 @@ function LoginForm({ slug = 'login' }) {
       try {
         await login(data)
         if (redirect?.current) router.push(redirect.current as string)
-        else router.push('/account')
+        else router.push('/')
       } catch (_) {
         setError('invalidCredentials')
       }
@@ -58,7 +57,7 @@ function LoginForm({ slug = 'login' }) {
       <div className="flex flex-col space-y-1.5 pb-6">
         <div className="font-semibold text-2xl tracking-tight">{'Login'}</div>
         <p className="text-muted-foreground text-sm">
-          {'Enter email to login to your account.'}
+          {'Enter password to login to your account.'}
         </p>
       </div>
 
@@ -105,7 +104,13 @@ function LoginForm({ slug = 'login' }) {
         </Link>
       </div> */}
 
-      {error && <div className="py-2 text-red-700 text-sm">{error}</div>}
+      {error && (
+        <div className="py-2 text-red-700 text-sm">
+          {error === 'invalidCredentials'
+            ? 'Invalid password. Please try again.'
+            : error}
+        </div>
+      )}
     </form>
   )
 }

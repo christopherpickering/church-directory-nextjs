@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  History,
-  Home,
-  LogOut,
-  MapPin,
-  MessageCircle,
-  PinIcon,
-} from 'lucide-react'
+import { Home, LogOut, MapPin, MessageCircle, PinIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type React from 'react'
@@ -30,11 +23,6 @@ export default function Navigation() {
       href: '/addresses',
       label: 'Addresses',
       icon: <PinIcon className="h-5 w-5" />,
-    },
-    {
-      href: '/history',
-      label: 'History',
-      icon: <History className="h-5 w-5" />,
     },
     { href: '/map', label: 'Map', icon: <MapPin className="h-5 w-5" /> },
     { href: '/logout', label: 'Log out', icon: <LogOut className="h-5 w-5" /> },
