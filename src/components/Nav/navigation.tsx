@@ -60,9 +60,6 @@ export default function Navigation() {
           <NavItem href="/addresses" active={activeRoute === '/addresses'}>
             Addresses
           </NavItem>
-          <NavItem href="/history" active={activeRoute === '/history'}>
-            History
-          </NavItem>
           <NavItem href="/map" active={activeRoute === '/map'}>
             Map
           </NavItem>
