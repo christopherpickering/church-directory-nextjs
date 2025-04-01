@@ -49,7 +49,7 @@ export default async function SlugPage({ params: paramsPromise }: Args) {
             <div className="w-full max-w-2xl">
               <a
                 href="/map"
-                className="flex w-full flex-col items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-center text-primary-foreground hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-primary sm:flex-row"
+                className="flex w-full flex-col items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-center text-primary-foreground hover:bg-primary/20 focus:outline-hidden focus:ring-2 focus:ring-primary sm:flex-row"
               >
                 <span>Open map (Location)</span>
                 <span className="text-gray-200 text-sm">
