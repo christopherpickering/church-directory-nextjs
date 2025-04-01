@@ -34,7 +34,7 @@ export default async function AddressesPage({
   return (
     <div className="pt-16 pb-24">
       <AuthenticatedLayout>
-        <div className="mx-auto max-w-7xl space-y-6 px-4">
+        <div className="mx-auto space-y-6">
           <ListView
             addresses={paginatedAddresses}
             totalPages={totalPages}

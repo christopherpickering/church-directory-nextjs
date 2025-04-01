@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="flex min-h-screen flex-col">
       <SearchHeader isLoggedIn={true} />
       <Navigation />
-      <main className="container mx-auto flex-1 p-4">{children}</main>
+      <main className="flex-1 py-4">{children}</main>
     </div>
   )
 }

@@ -54,6 +54,7 @@ export type SupportedTimezones =
   | 'Asia/Singapore'
   | 'Asia/Tokyo'
   | 'Asia/Seoul'
+  | 'Australia/Brisbane'
   | 'Australia/Sydney'
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
@@ -103,14 +104,8 @@ export interface Config {
   db: {
     defaultIDType: number
   }
-  globals: {
-    header: Header
-    footer: Footer
-  }
-  globalsSelect: {
-    header: HeaderSelect<false> | HeaderSelect<true>
-    footer: FooterSelect<false> | FooterSelect<true>
-  }
+  globals: {}
+  globalsSelect: {}
   locale: null
   user: User & {
     collection: 'users'
@@ -151,6 +146,21 @@ export interface UserAuthOperations {
 export interface Page {
   id: number
   title: string
+  content?: {
+    root: {
+      type: string
+      children: {
+        type: string
+        version: number
+        [k: string]: unknown
+      }[]
+      direction: ('ltr' | 'rtl') | null
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+      indent: number
+      version: number
+    }
+    [k: string]: unknown
+  } | null
   publishedAt?: string | null
   slug?: string | null
   slugLock?: boolean | null
@@ -292,10 +302,10 @@ export interface Location {
     country?: string | null
     addressLine1: string
     addressLine2?: string | null
-    postalCode?: string | null
     city?: string | null
     state?: string | null
-    phone: string
+    postalCode?: string | null
+    phone?: string | null
     /**
      * Automatically populated when address is saved
      */
@@ -309,9 +319,6 @@ export interface Location {
       | null
     lastGeocodedAt?: string | null
   }
-  /**
-   * Church notes
-   */
   notes?: {
     root: {
       type: string
@@ -360,10 +367,10 @@ export interface Contact {
     country?: string | null
     addressLine1: string
     addressLine2?: string | null
-    postalCode?: string | null
     city?: string | null
     state?: string | null
-    phone: string
+    postalCode?: string | null
+    phone?: string | null
     /**
      * Automatically populated when address is saved
      */
@@ -624,6 +631,7 @@ export interface PayloadMigration {
  */
 export interface PagesSelect<T extends boolean = true> {
   title?: T
+  content?: T
   publishedAt?: T
   slug?: T
   slugLock?: T
@@ -756,9 +764,9 @@ export interface LocationsSelect<T extends boolean = true> {
         country?: T
         addressLine1?: T
         addressLine2?: T
-        postalCode?: T
         city?: T
         state?: T
+        postalCode?: T
         phone?: T
         latitude?: T
         longitude?: T
@@ -786,9 +794,9 @@ export interface ContactsSelect<T extends boolean = true> {
         country?: T
         addressLine1?: T
         addressLine2?: T
-        postalCode?: T
         city?: T
         state?: T
+        postalCode?: T
         phone?: T
         latitude?: T
         longitude?: T
@@ -895,100 +903,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T
   updatedAt?: T
   createdAt?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header".
- */
-export interface Header {
-  id: number
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null
-          newTab?: boolean | null
-          reference?: {
-            relationTo: 'pages'
-            value: number | Page
-          } | null
-          url?: string | null
-          label: string
-        }
-        id?: string | null
-      }[]
-    | null
-  updatedAt?: string | null
-  createdAt?: string | null
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer".
- */
-export interface Footer {
-  id: number
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null
-          newTab?: boolean | null
-          reference?: {
-            relationTo: 'pages'
-            value: number | Page
-          } | null
-          url?: string | null
-          label: string
-        }
-        id?: string | null
-      }[]
-    | null
-  updatedAt?: string | null
-  createdAt?: string | null
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header_select".
- */
-export interface HeaderSelect<T extends boolean = true> {
-  navItems?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T
-              newTab?: T
-              reference?: T
-              url?: T
-              label?: T
-            }
-        id?: T
-      }
-  updatedAt?: T
-  createdAt?: T
-  globalType?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer_select".
- */
-export interface FooterSelect<T extends boolean = true> {
-  navItems?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T
-              newTab?: T
-              reference?: T
-              url?: T
-              label?: T
-            }
-        id?: T
-      }
-  updatedAt?: T
-  createdAt?: T
-  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

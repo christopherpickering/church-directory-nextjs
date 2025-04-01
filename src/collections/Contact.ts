@@ -1,4 +1,5 @@
-import { authenticated } from '@/access/authenticated'
+import { admins } from '@/access/admins'
+import { checkRole } from '@/access/checkRole'
 import type { CollectionConfig } from 'payload'
 import { address } from './Address'
 
@@ -9,10 +10,16 @@ export const Contacts: CollectionConfig = {
     defaultColumns: ['firstName', 'lastName', 'email'],
   },
   access: {
-    read: authenticated,
-    update: authenticated,
-    create: authenticated,
-    delete: authenticated,
+    admin: ({ req: { user } }) => {
+      if (user) {
+        return checkRole('admin', user)
+      }
+      return false
+    },
+    read: admins,
+    update: admins,
+    create: admins,
+    delete: admins,
   },
   fields: [
     {

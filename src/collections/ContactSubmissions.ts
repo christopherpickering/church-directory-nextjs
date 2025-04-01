@@ -1,5 +1,6 @@
+import { admins } from '@/access/admins'
 import { anyone } from '@/access/anyone'
-import { authenticated } from '@/access/authenticated'
+import { checkRole } from '@/access/checkRole'
 import type { CollectionConfig } from 'payload'
 
 export const ContactSubmissions: CollectionConfig = {
@@ -10,10 +11,16 @@ export const ContactSubmissions: CollectionConfig = {
     description: 'Contact form submissions',
   },
   access: {
-    read: authenticated,
-    update: authenticated,
+    admin: ({ req: { user } }) => {
+      if (user) {
+        return checkRole('admin', user)
+      }
+      return false
+    },
+    read: admins,
+    update: admins,
     create: anyone,
-    delete: authenticated,
+    delete: admins,
   },
   fields: [
     {

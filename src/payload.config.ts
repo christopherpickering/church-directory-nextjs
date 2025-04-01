@@ -2,12 +2,10 @@
 
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { type PayloadRequest, buildConfig } from 'payload'
+import { buildConfig } from 'payload'
 import sharp from 'sharp' // sharp-import
 
 import { defaultLexical } from '@/fields/defaultLexical'
-import { Footer } from './Footer/config'
-import { Header } from './Header/config'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Users } from './collections/Users'
@@ -68,26 +66,10 @@ export default buildConfig({
   // database-adapter-config-end
   collections: [Pages, Media, Users, Locations, Contacts, ContactSubmissions],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
   plugins: [...plugins],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
-  },
-  jobs: {
-    access: {
-      run: ({ req }: { req: PayloadRequest }): boolean => {
-        // Allow logged in users to execute this endpoint (default)
-        if (req.user) return true
-
-        // If there is no logged in user, then check
-        // for the Vercel Cron secret to be present as an
-        // Authorization header:
-        const authHeader = req.headers.get('authorization')
-        return authHeader === `Bearer ${process.env.CRON_SECRET}`
-      },
-    },
-    tasks: [],
   },
 })

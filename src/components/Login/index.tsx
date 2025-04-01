@@ -53,7 +53,10 @@ function LoginForm({ slug = 'login' }) {
   }, [setFocus, slug])
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="m-1">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="m-1 w-full space-y-2 md:w-1/2 lg:w-1/3"
+    >
       <div className="flex flex-col space-y-1.5 pb-6">
         <div className="font-semibold text-2xl tracking-tight">{'Login'}</div>
         <p className="text-muted-foreground text-sm">
@@ -65,14 +68,6 @@ function LoginForm({ slug = 'login' }) {
         <div className="grid gap-2">
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
-            {/* <Link
-              tabIndex={-1}
-              href={`/auth/recover-password${allParams}`}
-              className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-              replace={modal}
-            >
-              {'Forgot your password?'}
-            </Link> */}
           </div>
           <Input
             id="password"
@@ -87,30 +82,19 @@ function LoginForm({ slug = 'login' }) {
             {!errors.password?.message && errors.password?.type === 'required'
               ? 'required'
               : errors.password?.message}
+            {error && (
+              <div className="py-2 text-red-700 text-sm">
+                {error === 'invalidCredentials'
+                  ? 'Invalid password. Please try again.'
+                  : error}
+              </div>
+            )}
           </div>
         </div>
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? 'Processing...' : 'Login'}
         </Button>
       </div>
-      {/* <div className="mt-4 text-center text-sm">
-        {"Don't have an account?"}{' '}
-        <Link
-          href={`/auth/create-account${allParams}`}
-          className="underline underline-offset-4"
-          replace={modal}
-        >
-          {'Sign up'}
-        </Link>
-      </div> */}
-
-      {error && (
-        <div className="py-2 text-red-700 text-sm">
-          {error === 'invalidCredentials'
-            ? 'Invalid password. Please try again.'
-            : error}
-        </div>
-      )}
     </form>
   )
 }

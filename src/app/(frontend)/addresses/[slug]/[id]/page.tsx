@@ -95,6 +95,7 @@ async function getAddressById(slug: string, id: string) {
 
     const result = await payload.findByID({
       collection: slug,
+      overrideAccess: true,
       id,
     })
 
@@ -158,7 +159,7 @@ export default async function AddressDetailPage({
 
               <div className="space-y-4 rounded-lg border p-6">
                 <div className="flex items-start">
-                  <MapPin className="mt-0.5 mr-3 h-5 w-5 flex-shrink-0 text-primary" />
+                  <MapPin className="mt-0.5 mr-3 h-5 w-5 shrink-0 text-primary" />
                   <div>
                     <h3 className="font-semibold">Address</h3>
                     <p className="whitespace-pre-line text-muted-foreground">
@@ -169,7 +170,7 @@ export default async function AddressDetailPage({
 
                 {addressDetails.phone && (
                   <div className="flex items-center">
-                    <Phone className="mr-3 h-5 w-5 flex-shrink-0 text-primary" />
+                    <Phone className="mr-3 h-5 w-5 shrink-0 text-primary" />
                     <div>
                       <h3 className="font-semibold">Phone</h3>
                       <p className="text-muted-foreground">
@@ -181,7 +182,7 @@ export default async function AddressDetailPage({
 
                 {addressDetails.email && (
                   <div className="flex items-center">
-                    <Mail className="mr-3 h-5 w-5 flex-shrink-0 text-primary" />
+                    <Mail className="mr-3 h-5 w-5 shrink-0 text-primary" />
                     <div>
                       <h3 className="font-semibold">Email</h3>
                       <a
@@ -196,7 +197,7 @@ export default async function AddressDetailPage({
 
                 {addressDetails.website && (
                   <div className="flex items-center">
-                    <Globe className="mr-3 h-5 w-5 flex-shrink-0 text-primary" />
+                    <Globe className="mr-3 h-5 w-5 shrink-0 text-primary" />
                     <div>
                       <h3 className="font-semibold">Website</h3>
                       <a

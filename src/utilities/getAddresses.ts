@@ -31,6 +31,7 @@ export async function getAddresses() {
 
   const locations = await payload.find({
     collection: 'locations',
+    overrideAccess: true,
     limit: 1000,
   })
 
