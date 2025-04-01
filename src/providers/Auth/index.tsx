@@ -92,6 +92,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            email: process.env.NEXT_PUBLIC_USER_EMAIL,
             password: args.password,
           }),
         },
