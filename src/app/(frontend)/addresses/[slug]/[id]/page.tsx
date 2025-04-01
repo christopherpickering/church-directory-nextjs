@@ -95,6 +95,7 @@ async function getAddressById(slug: string, id: string) {
 
     const result = await payload.findByID({
       collection: slug,
+      overrideAccess: true,
       id,
     })
 

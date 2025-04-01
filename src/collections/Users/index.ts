@@ -1,15 +1,21 @@
+import { admins } from '@/access/admins'
+import { adminsAndUser } from '@/access/adminsAndUser'
+import { checkRole } from '@/access/checkRole'
 import type { CollectionConfig } from 'payload'
-
-import { authenticated } from '../../access/authenticated'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
-    admin: authenticated,
-    create: authenticated,
-    delete: authenticated,
-    read: authenticated,
-    update: authenticated,
+    admin: ({ req: { user } }) => {
+      if (user) {
+        return checkRole('admin', user)
+      }
+      return false
+    },
+    create: admins,
+    delete: admins,
+    read: adminsAndUser,
+    update: admins,
   },
   admin: {
     defaultColumns: ['name', 'email'],

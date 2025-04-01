@@ -30,7 +30,7 @@ export default function Navigation() {
 
   return (
     <nav className="border-primary-dark/50 border-t bg-primary-dark pb-10 text-primary-dark">
-      <div className="container mx-auto flex items-center justify-between px-4">
+      <div className="flex items-center justify-between px-4">
         {/* Mobile Navigation with Icons */}
         <div className="flex w-full justify-between lg:hidden">
           {navItems.map((item) => (
@@ -59,9 +59,6 @@ export default function Navigation() {
           </NavItem>
           <NavItem href="/addresses" active={activeRoute === '/addresses'}>
             Addresses
-          </NavItem>
-          <NavItem href="/history" active={activeRoute === '/history'}>
-            History
           </NavItem>
           <NavItem href="/map" active={activeRoute === '/map'}>
             Map

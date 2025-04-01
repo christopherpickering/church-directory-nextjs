@@ -24,11 +24,7 @@ export const address: AddressType = ({ overrides = {} } = {}) => {
         type: 'text',
         required: false,
       },
-      {
-        name: 'postalCode',
-        type: 'text',
-        required: false,
-      },
+
       {
         name: 'city',
         type: 'text',
@@ -40,9 +36,14 @@ export const address: AddressType = ({ overrides = {} } = {}) => {
         required: false,
       },
       {
+        name: 'postalCode',
+        type: 'text',
+        required: false,
+      },
+      {
         name: 'phone',
         type: 'text',
-        required: true,
+        required: false,
       },
       {
         name: 'latitude',

@@ -1,30 +1,37 @@
 import AddressSearch from '@/components/AddressSearch'
 import AuthenticatedLayout from '@/components/AuthLayout'
+import { RichText } from '@/components/RichText'
+import type { Page as PageType } from '@/payload-types'
+import configPromise from '@payload-config'
+import { draftMode } from 'next/headers'
+import { notFound } from 'next/navigation'
+import { getPayload } from 'payload'
+import { cache } from 'react'
 
-export default function SlugPage() {
+type Args = {
+  params: Promise<{
+    slug?: string
+  }>
+}
+
+export default async function SlugPage({ params: paramsPromise }: Args) {
+  const { slug = 'home' } = await paramsPromise
+
+  const page: PageType | null = await queryPageBySlug({
+    slug,
+  })
+
+  if (!page) {
+    return notFound()
+  }
+
   return (
     <div className="pt-16 pb-24">
       <AuthenticatedLayout>
-        <div className="mx-auto max-w-4xl space-y-8 px-4">
+        <div className="mx-auto space-y-8 ">
           <div className="space-y-4">
             <div className="prose max-w-none">
-              <p>
-                This directory contains congregations in{' '}
-                <span className="font-bold">Location</span> known to gather
-                solely in the name of the Lord Jesus and to seek to realize the
-                unity of the Spirit. This directory is intended as a guide and
-                is not intended to define any particular group.
-              </p>
-              <p>
-                Publishing the directory online eliminates the time-consuming
-                task of maintaining a separate directory. Those who still want
-                to maintain a paper directory can view the changes under
-                &quot;History,&quot; which can then be transferred to the paper
-                version.
-              </p>
-              <p className="font-medium">
-                Please treat all data strictly confidential!
-              </p>
+              {page.content && <RichText data={page.content} />}
             </div>
           </div>
 
@@ -56,3 +63,23 @@ export default function SlugPage() {
     </div>
   )
 }
+
+const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
+  const { isEnabled: draft } = await draftMode()
+
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'pages',
+    draft,
+    limit: 1,
+    overrideAccess: true,
+    where: {
+      slug: {
+        equals: slug,
+      },
+    },
+  })
+
+  return result.docs?.[0] || null
+})

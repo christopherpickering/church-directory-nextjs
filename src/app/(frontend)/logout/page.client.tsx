@@ -27,5 +27,5 @@ export const LogoutPage: React.FC = () => {
     performLogout()
   }, [logout, router])
 
-  return <article className="container pt-16 pb-16">Logging out...</article>
+  return <article className="pt-16 pb-16">Logging out...</article>
 }

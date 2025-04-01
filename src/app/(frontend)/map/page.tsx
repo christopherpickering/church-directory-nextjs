@@ -7,9 +7,7 @@ export default async function MapPage() {
   return (
     <div className="pt-16 pb-24">
       <AuthenticatedLayout>
-        <div className="space-y-4">
-          <MapPageClient addresses={addresses} />
-        </div>
+        <MapPageClient addresses={addresses} />
       </AuthenticatedLayout>
     </div>
   )
