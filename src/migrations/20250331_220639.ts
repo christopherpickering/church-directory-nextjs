@@ -2,24 +2,84 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-   ALTER TABLE "history_changed_fields" DISABLE ROW LEVEL SECURITY;
-  ALTER TABLE "history" DISABLE ROW LEVEL SECURITY;
-  DROP TABLE "history_changed_fields" CASCADE;
-  DROP TABLE "history" CASCADE;
-  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_history_fk";
+  DO $$ BEGIN
+    ALTER TABLE "history_changed_fields" DISABLE ROW LEVEL SECURITY;
+  EXCEPTION
+    WHEN undefined_table THEN null;
+  END $$;
+
+  DO $$ BEGIN
+    ALTER TABLE "history" DISABLE ROW LEVEL SECURITY;
+  EXCEPTION
+    WHEN undefined_table THEN null;
+  END $$;
+
+  DO $$ BEGIN
+    DROP TABLE IF EXISTS "history_changed_fields" CASCADE;
+    DROP TABLE IF EXISTS "history" CASCADE;
+  END $$;
+  
+  DO $$ BEGIN
+    ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_history_fk";
+  EXCEPTION
+    WHEN undefined_object THEN null;
+  END $$;
   
   DROP INDEX IF EXISTS "payload_locked_documents_rels_history_id_idx";
   ALTER TABLE "payload_locked_documents_rels" DROP COLUMN IF EXISTS "history_id";
-  ALTER TABLE "public"."locations" ALTER COLUMN "address_geocoding_status" SET DATA TYPE text;
-  DROP TYPE "public"."enum_locations_address_geocoding_status";
-  CREATE TYPE "public"."enum_locations_address_geocoding_status" AS ENUM('not_geocoded', 'geocoding', 'geocoded', 'failed');
-  ALTER TABLE "public"."locations" ALTER COLUMN "address_geocoding_status" SET DATA TYPE "public"."enum_locations_address_geocoding_status" USING "address_geocoding_status"::"public"."enum_locations_address_geocoding_status";
-  ALTER TABLE "public"."contacts" ALTER COLUMN "address_geocoding_status" SET DATA TYPE text;
-  DROP TYPE "public"."enum_contacts_address_geocoding_status";
-  CREATE TYPE "public"."enum_contacts_address_geocoding_status" AS ENUM('not_geocoded', 'geocoding', 'geocoded', 'failed');
-  ALTER TABLE "public"."contacts" ALTER COLUMN "address_geocoding_status" SET DATA TYPE "public"."enum_contacts_address_geocoding_status" USING "address_geocoding_status"::"public"."enum_contacts_address_geocoding_status";
-  DROP TYPE "public"."enum_history_entity_type";
-  DROP TYPE "public"."enum_history_change_type";`)
+
+  -- Handle locations geocoding status
+  DO $$ BEGIN
+    -- First remove the default value if it exists
+    ALTER TABLE "public"."locations" ALTER COLUMN "address_geocoding_status" DROP DEFAULT;
+    -- Convert to text temporarily
+    ALTER TABLE "public"."locations" ALTER COLUMN "address_geocoding_status" TYPE text USING address_geocoding_status::text;
+    -- Now we can safely drop the enum
+    DROP TYPE IF EXISTS "public"."enum_locations_address_geocoding_status" CASCADE;
+    -- Create the new enum
+    CREATE TYPE "public"."enum_locations_address_geocoding_status" AS ENUM('not_geocoded', 'geocoding', 'geocoded', 'failed');
+    -- Convert back to the new enum type
+    ALTER TABLE "public"."locations" 
+      ALTER COLUMN "address_geocoding_status" TYPE "public"."enum_locations_address_geocoding_status" 
+      USING CASE 
+        WHEN address_geocoding_status = 'success' THEN 'geocoded'
+        WHEN address_geocoding_status IS NULL THEN 'not_geocoded'
+        ELSE address_geocoding_status::text
+      END::"public"."enum_locations_address_geocoding_status";
+    -- Set the default value
+    ALTER TABLE "public"."locations" ALTER COLUMN "address_geocoding_status" SET DEFAULT 'not_geocoded';
+  EXCEPTION
+    WHEN undefined_column THEN null;
+  END $$;
+
+  -- Handle contacts geocoding status
+  DO $$ BEGIN
+    -- First remove the default value if it exists
+    ALTER TABLE "public"."contacts" ALTER COLUMN "address_geocoding_status" DROP DEFAULT;
+    -- Convert to text temporarily
+    ALTER TABLE "public"."contacts" ALTER COLUMN "address_geocoding_status" TYPE text USING address_geocoding_status::text;
+    -- Now we can safely drop the enum
+    DROP TYPE IF EXISTS "public"."enum_contacts_address_geocoding_status" CASCADE;
+    -- Create the new enum
+    CREATE TYPE "public"."enum_contacts_address_geocoding_status" AS ENUM('not_geocoded', 'geocoding', 'geocoded', 'failed');
+    -- Convert back to the new enum type
+    ALTER TABLE "public"."contacts" 
+      ALTER COLUMN "address_geocoding_status" TYPE "public"."enum_contacts_address_geocoding_status" 
+      USING CASE 
+        WHEN address_geocoding_status = 'success' THEN 'geocoded'
+        WHEN address_geocoding_status IS NULL THEN 'not_geocoded'
+        ELSE address_geocoding_status::text
+      END::"public"."enum_contacts_address_geocoding_status";
+    -- Set the default value
+    ALTER TABLE "public"."contacts" ALTER COLUMN "address_geocoding_status" SET DEFAULT 'not_geocoded';
+  EXCEPTION
+    WHEN undefined_column THEN null;
+  END $$;
+
+  DO $$ BEGIN
+    DROP TYPE IF EXISTS "public"."enum_history_entity_type" CASCADE;
+    DROP TYPE IF EXISTS "public"."enum_history_change_type" CASCADE;
+  END $$;`)
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
