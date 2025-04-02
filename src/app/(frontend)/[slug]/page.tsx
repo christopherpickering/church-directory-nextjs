@@ -16,30 +16,33 @@ type Args = {
   params: Promise<{
     slug?: string
   }>
-  searchParams?: {
+  searchParams?: Promise<{
     search?: string
-    page?: string
-  }
+    currentPage?: string
+  }>
 }
 
 export default async function SlugPage({
   params: paramsPromise,
-  searchParams = {},
+  searchParams: searchParamsPromise,
 }: Args) {
   const { slug = 'home' } = await paramsPromise
-  const isHomepage = slug === 'home'
-
-  const params = await searchParams
-  const searchQuery = params?.search
-  const currentPage = Number(params?.page) || 1
+  const { search, currentPage } = (await searchParamsPromise) || {}
 
   const page: PageType | null = await queryPageBySlug({
     slug,
   })
 
+  if (!page) {
+    return notFound()
+  }
+
+  const isHomepage = slug === 'home'
+  const searchQuery = search || ''
+  const currentPageNumber = currentPage ? Number.parseInt(currentPage, 10) : 1
+
   const settings = await getSiteSettings()
 
-  // Fetch addresses for the homepage
   const addresses = isHomepage ? await getAddresses() : []
 
   if (!page) {
@@ -56,24 +59,30 @@ export default async function SlugPage({
               {page.content && <RichText data={page.content} />}
             </div>
           </div>
-          <div className="w-full">
-            <Tabs defaultValue="map" className="w-full">
-              <TabsList className="mb-4 w-full justify-start">
-                <TabsTrigger value="map">Map View</TabsTrigger>
-                <TabsTrigger value="list">List View</TabsTrigger>
-              </TabsList>
-              <TabsContent value="map" className="w-full">
-                <HomeMap />
-              </TabsContent>
-              <TabsContent value="list" className="w-full">
-                <AddressList
-                  addresses={addresses}
-                  initialSearchQuery={searchQuery}
-                  initialPage={currentPage}
-                />
-              </TabsContent>
-            </Tabs>
-          </div>
+          {isHomepage ? (
+            // Homepage content with tabs for map and list
+            <div className="w-full">
+              <Tabs defaultValue="map" className="w-full">
+                <TabsList className="mb-4 w-full justify-start">
+                  <TabsTrigger value="map">Map View</TabsTrigger>
+                  <TabsTrigger value="list">List View</TabsTrigger>
+                </TabsList>
+                <TabsContent value="map" className="w-full">
+                  <HomeMap />
+                </TabsContent>
+                <TabsContent value="list" className="w-full">
+                  <AddressList
+                    addresses={addresses}
+                    initialSearchQuery={searchQuery}
+                    initialPage={currentPageNumber}
+                  />
+                </TabsContent>
+              </Tabs>
+            </div>
+          ) : (
+            // Non-homepage content
+            <div>{/* Additional content for non-homepage */}</div>
+          )}
         </div>
       </AuthenticatedLayout>
     </div>
