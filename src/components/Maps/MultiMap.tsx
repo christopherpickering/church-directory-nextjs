@@ -6,9 +6,11 @@ import MarkerClusterGroup from './cluster'
 import 'leaflet-defaulticon-compatibility'
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css'
 import 'leaflet/dist/leaflet.css'
+import L from 'leaflet'
 import Link from 'next/link'
 import { type HTMLAttributes, useEffect, useRef, useState } from 'react'
 import { GeoJSON, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import 'leaflet.markercluster'
 
 type MapProps = HTMLAttributes<HTMLElement> & {
   code?: string | null
@@ -86,7 +88,29 @@ const MultiMap = ({
         url={`https://api.mapbox.com/styles/v1/christopherpickering/cl8ywzj0i00dc15mvjr9pfvcu/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`}
       />
       <Fullscreen />
-      <MarkerClusterGroup maxClusterRadius={clusterFunc}>
+      <MarkerClusterGroup
+        maxClusterRadius={clusterFunc}
+        showCoverageOnHover={false}
+        iconCreateFunction={(cluster: any) => {
+          const count = cluster.getChildCount()
+          let size = 'small'
+          let iconSize = 40
+
+          if (count > 50) {
+            size = 'large'
+            iconSize = 60
+          } else if (count > 10) {
+            size = 'medium'
+            iconSize = 50
+          }
+
+          return L.divIcon({
+            html: `<div class="cluster-icon cluster-${size}">${count}</div>`,
+            className: 'custom-marker-cluster',
+            iconSize: L.point(iconSize, iconSize),
+          })
+        }}
+      >
         {points?.map((point) => {
           const title = `${point.type}: ${point.name}`
           if (!(point.lat && point.long)) return null

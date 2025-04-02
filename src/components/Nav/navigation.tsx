@@ -1,6 +1,6 @@
 'use client'
 
-import { Home, LogOut, MapPin, MessageCircle, PinIcon } from 'lucide-react'
+import { Home, LogOut, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type React from 'react'
@@ -19,12 +19,6 @@ export default function Navigation() {
 
   const navItems = [
     { href: '/', label: 'Home', icon: <Home className="h-5 w-5" /> },
-    {
-      href: '/addresses',
-      label: 'Addresses',
-      icon: <PinIcon className="h-5 w-5" />,
-    },
-    { href: '/map', label: 'Map', icon: <MapPin className="h-5 w-5" /> },
     { href: '/logout', label: 'Log out', icon: <LogOut className="h-5 w-5" /> },
   ]
 
@@ -56,12 +50,6 @@ export default function Navigation() {
         <div className="hidden lg:flex">
           <NavItem href="/" active={activeRoute === '/'}>
             Home
-          </NavItem>
-          <NavItem href="/addresses" active={activeRoute === '/addresses'}>
-            Addresses
-          </NavItem>
-          <NavItem href="/map" active={activeRoute === '/map'}>
-            Map
           </NavItem>
           <NavItem href="/logout" active={activeRoute === '/logout'}>
             <span className="flex items-center gap-1">

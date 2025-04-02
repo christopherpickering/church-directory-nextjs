@@ -119,3 +119,44 @@ html[data-theme="dark"],
 html[data-theme="light"] {
   opacity: initial;
 }
+
+/* Custom Marker Clusters */
+.custom-marker-cluster {
+  background: transparent;
+}
+
+.cluster-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(38, 127, 207, 0.8);
+  color: white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(38, 127, 207, 0.3);
+  font-weight: bold;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.cluster-small {
+  width: 40px;
+  height: 40px;
+  font-size: 14px;
+}
+
+.cluster-medium {
+  width: 50px;
+  height: 50px;
+  font-size: 16px;
+}
+
+.cluster-large {
+  width: 60px;
+  height: 60px;
+  font-size: 18px;
+}
+
+.cluster-icon:hover {
+  background-color: rgba(38, 127, 207, 1);
+  transform: scale(1.05);
+}

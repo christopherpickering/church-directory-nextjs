@@ -18,37 +18,35 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { type FormEvent, useState } from 'react'
-interface ListViewProps {
+
+interface ClientListViewProps {
   addresses: AddressData[]
   totalPages: number
   currentPage: number
   searchQuery: string
+  onSearch: (query: string) => void
+  onPageChange: (page: number) => void
 }
 
-export default function ListView({
+export default function ClientListView({
   addresses,
   totalPages,
   currentPage,
   searchQuery,
-}: ListViewProps) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  onSearch,
+  onPageChange,
+}: ClientListViewProps) {
   const [searchInput, setSearchInput] = useState(searchQuery)
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault()
-    const params = new URLSearchParams(searchParams.toString())
-    params.set('search', searchInput)
-    params.set('page', '1')
-    router.push(`/addresses?${params.toString()}`)
+    onSearch(searchInput)
   }
 
   const handlePageChange = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString())
-    params.set('page', page.toString())
-    router.push(`/addresses?${params.toString()}`)
+    if (page < 1 || page > totalPages) return
+    onPageChange(page)
   }
 
   return (

@@ -104,8 +104,12 @@ export interface Config {
   db: {
     defaultIDType: number
   }
-  globals: {}
-  globalsSelect: {}
+  globals: {
+    'site-settings': SiteSetting
+  }
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>
+  }
   locale: null
   user: User & {
     collection: 'users'
@@ -903,6 +907,48 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T
   updatedAt?: T
   createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number
+  title: string
+  description: string
+  meta?: {
+    defaultImage?: (number | null) | Media
+    favicon?: (number | null) | Media
+  }
+  contact?: {
+    email?: string | null
+    phone?: string | null
+  }
+  updatedAt?: string | null
+  createdAt?: string | null
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  title?: T
+  description?: T
+  meta?:
+    | T
+    | {
+        defaultImage?: T
+        favicon?: T
+      }
+  contact?:
+    | T
+    | {
+        email?: T
+        phone?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
