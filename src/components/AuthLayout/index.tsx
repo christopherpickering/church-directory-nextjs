@@ -7,15 +7,19 @@ import { useAuth } from '@/providers/Auth'
 import type React from 'react'
 export default function AuthenticatedLayout({
   children,
-}: { children: React.ReactNode }) {
+  title,
+}: {
+  children: React.ReactNode
+  title: string
+}) {
   const { user } = useAuth()
 
   if (user) {
-    return <DashboardLayout>{children}</DashboardLayout>
+    return <DashboardLayout title={title}>{children}</DashboardLayout>
   }
 
   return (
-    <LoginDashboard>
+    <LoginDashboard title={title}>
       <Login />
     </LoginDashboard>
   )

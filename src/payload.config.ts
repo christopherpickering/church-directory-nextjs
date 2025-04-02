@@ -6,6 +6,7 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp' // sharp-import
 
 import { defaultLexical } from '@/fields/defaultLexical'
+import { SiteSettings } from './collections/Globals'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Users } from './collections/Users'
@@ -65,6 +66,7 @@ export default buildConfig({
   }),
   // database-adapter-config-end
   collections: [Pages, Media, Users, Locations, Contacts, ContactSubmissions],
+  globals: [SiteSettings],
   cors: [getServerSideURL()].filter(Boolean),
   plugins: [...plugins],
   secret: process.env.PAYLOAD_SECRET,

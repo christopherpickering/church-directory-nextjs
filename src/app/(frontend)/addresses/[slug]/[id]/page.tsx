@@ -141,11 +141,11 @@ export default async function AddressDetailPage({
 
   return (
     <div className="pt-16 pb-24">
-      <DashboardLayout>
+      <DashboardLayout title={addressDetails.name}>
         <div className="mx-auto max-w-7xl space-y-8 px-4">
           <div className="mb-8">
             <Link
-              href="/addresses"
+              href="/"
               className="inline-flex items-center text-primary hover:text-primary/80"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
