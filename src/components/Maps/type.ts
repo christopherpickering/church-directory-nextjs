@@ -1,6 +1,9 @@
 export interface AddressData {
   type: 'locations' | 'contacts'
   id: number
+  contact?: {
+    fullName: string | null
+  } | null
   country?: string | null
   addressLine1: string
   addressLine2?: string | null

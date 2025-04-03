@@ -21,6 +21,7 @@ type MapProps = HTMLAttributes<HTMLElement> & {
     name: string | null
     lat: number | null
     long: number | null
+    person: string | null
   }[]
   lat?: number
   long?: number
@@ -112,7 +113,7 @@ const MultiMap = ({
         }}
       >
         {points?.map((point) => {
-          const title = `${point.type}: ${point.name}`
+          const _title = `${point.type}: ${point.name}`
           if (!(point.lat && point.long)) return null
           return (
             <Marker
@@ -122,7 +123,17 @@ const MultiMap = ({
             >
               <Popup>
                 <Link href={`/${point.type}/${point.slug}/${point.id}`}>
-                  {title}
+                  <div className="flex flex-col">
+                    <h3 className="font-semibold">type: {point.slug}</h3>
+                    <p className="text-gray-500 text-sm">
+                      address: {point.name}
+                    </p>
+                    {point.person && (
+                      <p className="text-gray-500 text-sm">
+                        person: {point.person}
+                      </p>
+                    )}
+                  </div>
                 </Link>
               </Popup>
             </Marker>
