@@ -3,24 +3,24 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import { useAuth } from '@/providers/Auth'
-// import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import React, { Suspense, useCallback, useRef } from 'react'
+import React, { Suspense, useCallback, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 type FormData = {
   password: string
 }
 
-// Create a separate component that uses useSearchParams
 function LoginForm({ slug = 'login' }) {
   const searchParams = useSearchParams()
   const redirect = useRef(searchParams.get('redirect'))
   const { login, user } = useAuth()
   const router = useRouter()
   const [error, setError] = React.useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   if (user) {
     router.push(`/?warning=${encodeURIComponent('You are already logged in.')}`)
@@ -29,18 +29,22 @@ function LoginForm({ slug = 'login' }) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isLoading },
+    formState: { errors },
     setFocus,
   } = useForm<FormData>()
 
   const onSubmit = useCallback(
     async (data: FormData) => {
+      setIsSubmitting(true)
+      setError(null)
+
       try {
         await login(data)
         if (redirect?.current) router.push(redirect.current as string)
         else router.push('/')
       } catch (_) {
         setError('invalidCredentials')
+        setIsSubmitting(false)
       }
     },
     [login, router],
@@ -73,9 +77,9 @@ function LoginForm({ slug = 'login' }) {
             id="password"
             type="password"
             required
+            disabled={isSubmitting}
             {...register('password', {
               required: 'true',
-              // validate,
             })}
           />
           <div className="text-red-700 text-sm">
@@ -91,15 +95,21 @@ function LoginForm({ slug = 'login' }) {
             )}
           </div>
         </div>
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? 'Processing...' : 'Login'}
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <div className="flex items-center justify-center">
+              <LoadingSpinner className="mr-2" size="sm" />
+              <span>Logging in...</span>
+            </div>
+          ) : (
+            'Login'
+          )}
         </Button>
       </div>
     </form>
   )
 }
 
-// Main component with Suspense
 export const Login: React.FC<{
   slug?: string
 }> = ({ slug = 'login' }) => {

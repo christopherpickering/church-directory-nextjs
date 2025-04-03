@@ -1,7 +1,7 @@
 import DashboardLayout from '@/components/DashboardLayout'
 import { RichText } from '@/components/RichText'
 import configPromise from '@payload-config'
-import { ArrowLeft, Globe, Mail, MapPin, Phone } from 'lucide-react'
+import { ArrowLeft, Globe, Mail, MapPin, Phone, User } from 'lucide-react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -31,6 +31,7 @@ interface Location {
   website?: string
   notes?: any
   schedule?: any
+  relatedContacts?: Contact[]
 }
 
 interface Contact {
@@ -98,6 +99,21 @@ async function getAddressById(slug: string, id: string) {
       overrideAccess: true,
       id,
     })
+
+    const location = result as Location
+    if (slug === 'locations') {
+      const relatedContacts = await payload.find({
+        collection: 'contacts',
+        where: {
+          location: {
+            equals: result.id,
+          },
+        },
+        limit: 100,
+      })
+      location.relatedContacts = relatedContacts.docs as Contact[]
+      return location
+    }
 
     return result
   } catch (error) {
@@ -229,6 +245,75 @@ export default async function AddressDetailPage({
                   )}
                 </div>
               )}
+
+              {/* Contact Persons section moved to the first column */}
+              {isLocation &&
+                (() => {
+                  const relatedContacts = (address as Location).relatedContacts
+                  if (relatedContacts && relatedContacts.length > 0) {
+                    return (
+                      <div className="rounded-lg border p-6">
+                        <h3 className="mb-3 font-semibold">Contact Persons</h3>
+                        <div className="space-y-4">
+                          {relatedContacts.map((contact) => (
+                            <div
+                              key={contact.id}
+                              className="rounded-md border p-4"
+                            >
+                              <div className="flex items-start">
+                                <User className="mt-0.5 mr-3 h-5 w-5 shrink-0 text-primary" />
+                                <div className="space-y-2">
+                                  <div>
+                                    <h4 className="font-medium">
+                                      <Link
+                                        href={`/addresses/contacts/${contact.id}`}
+                                        className="text-primary hover:underline"
+                                      >
+                                        {contact.fullName}
+                                      </Link>
+                                    </h4>
+                                    {contact.phoneNumber && (
+                                      <p className="text-muted-foreground text-sm">
+                                        <span className="font-medium">
+                                          Phone:
+                                        </span>{' '}
+                                        {contact.phoneNumber}
+                                      </p>
+                                    )}
+                                    {contact.email && (
+                                      <p className="text-muted-foreground text-sm">
+                                        <span className="font-medium">
+                                          Email:
+                                        </span>{' '}
+                                        <a
+                                          href={`mailto:${contact.email}`}
+                                          className="text-primary hover:underline"
+                                        >
+                                          {contact.email}
+                                        </a>
+                                      </p>
+                                    )}
+                                  </div>
+                                  {contact.notes && (
+                                    <div className="pt-2">
+                                      <p className="font-medium text-sm">
+                                        Notes:
+                                      </p>
+                                      <div className="prose-sm max-w-none text-muted-foreground">
+                                        <RichText data={contact.notes} />
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )
+                  }
+                  return null
+                })()}
             </div>
 
             <div className="h-[500px] overflow-hidden rounded-lg border">

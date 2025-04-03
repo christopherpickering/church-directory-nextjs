@@ -9,6 +9,7 @@ import type { Contact, Location } from '@/payload-types'
 const buildAddress = (
   object: Location | Contact,
   slug: string,
+  fullName: string | null = null,
 ): AddressData => {
   return {
     id: object.id,
@@ -22,6 +23,7 @@ const buildAddress = (
     latitude: object.address.latitude || 0,
     longitude: object.address.longitude || 0,
     type: slug as 'locations' | 'contacts',
+    contact: fullName ? { fullName } : null,
   }
 }
 
@@ -57,6 +59,11 @@ export async function getAddresses() {
   const contacts = await payload.find({
     collection: 'contacts',
     limit: 1000,
+    where: {
+      location: {
+        exists: false,
+      },
+    },
   })
 
   for (const contact of contacts.docs) {
@@ -73,9 +80,9 @@ export async function getAddresses() {
           },
         },
       })
-      addresses.push(buildAddress(updatedContact, 'contacts'))
+      addresses.push(buildAddress(updatedContact, 'contacts', contact.fullName))
     } else {
-      addresses.push(buildAddress(contact, 'contacts'))
+      addresses.push(buildAddress(contact, 'contacts', contact.fullName))
     }
   }
   return addresses
