@@ -69,5 +69,32 @@ export const ContactSubmissions: CollectionConfig = {
       },
     },
   ],
+  hooks: {
+    afterChange: [
+      async ({ doc, req, operation }) => {
+        if (operation === 'create') {
+          const adminUsers = await req.payload.find({
+            collection: 'users',
+            where: {
+              and: [
+                { role: { equals: 'admin' } },
+                { receiveEmail: { equals: true } },
+              ],
+            },
+          })
+
+          if (adminUsers?.docs?.length > 0) {
+            for (const admin of adminUsers.docs) {
+              await req.payload.sendEmail({
+                to: admin.email,
+                subject: 'New Contact Submission',
+                text: `A new contact submission has been received from ${doc.name}. Message: ${doc.message}`,
+              })
+            }
+          }
+        }
+      },
+    ],
+  },
   timestamps: true,
 }

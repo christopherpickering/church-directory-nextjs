@@ -14,11 +14,11 @@ import { plugins } from './plugins'
 import { getServerSideURL } from './utilities/getURL'
 
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import invariant from 'tiny-invariant'
 import { Contacts } from './collections/Contact'
 import { ContactSubmissions } from './collections/ContactSubmissions'
 import { Locations } from './collections/Location'
-
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -66,6 +66,25 @@ export default buildConfig({
   }),
   // database-adapter-config-end
   collections: [Pages, Media, Users, Locations, Contacts, ContactSubmissions],
+  email: process.env.SMTP_HOST
+    ? nodemailerAdapter({
+        defaultFromAddress: process.env.SMTP_FROM || 'no-reply@example.com',
+        defaultFromName: process.env.SMTP_NAME || 'No Reply',
+        transportOptions: {
+          host: process.env.SMTP_HOST || '',
+          auth: {
+            pass: process.env.SMTP_PASS || '',
+            user: process.env.SMTP_USER || '',
+          },
+          port: Number(process.env.SMTP_HOST) || 587,
+          requireTLS: true,
+          secure: Number(process.env.SMTP_PORT) === 465,
+          tls: {
+            rejectUnauthorized: false,
+          },
+        },
+      })
+    : nodemailerAdapter(),
   globals: [SiteSettings],
   cors: [getServerSideURL()].filter(Boolean),
   plugins: [...plugins],

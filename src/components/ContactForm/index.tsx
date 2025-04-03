@@ -47,6 +47,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
     try {
       const response = await fetch('/api/contact-submissions', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },

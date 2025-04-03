@@ -32,6 +32,16 @@ export const Users: CollectionConfig = {
       type: 'select',
       options: ['admin', 'user'],
     },
+    {
+      name: 'receiveEmail',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description:
+          'If checked, the user will receive email notifications for new submissions.',
+        condition: (data) => data?.role === 'admin',
+      },
+    },
   ],
   timestamps: true,
 }

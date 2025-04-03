@@ -20,6 +20,9 @@ importers:
       '@payloadcms/db-postgres':
         specifier: ^3.28.1
         version: 3.32.0(@types/react@19.1.0)(payload@3.32.0(graphql@16.10.0)(typescript@5.8.2))(react@19.1.0)
+      '@payloadcms/email-nodemailer':
+        specifier: ^3.32.0
+        version: 3.32.0(payload@3.32.0(graphql@16.10.0)(typescript@5.8.2))
       '@payloadcms/live-preview-react':
         specifier: ^3.28.1
         version: 3.32.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1318,6 +1321,12 @@ packages:
 
   '@payloadcms/drizzle@3.32.0':
     resolution: {integrity: sha512-JhLB9R40Bwb0PWNkmKRg7DvugKZvsvg7FEnyLWulaBMd+BHOkqNG8PboFXUwsKwuM08ZkU0J6WQ7XiyKTVqI8Q==}
+    peerDependencies:
+      payload: 3.32.0
+
+  '@payloadcms/email-nodemailer@3.32.0':
+    resolution: {integrity: sha512-boFfL7mioTZZaj9emd8Xwvy+KEOQPPEEZtF4bLxg5OhHYeN5olO0qdcZv+Q08t9gYU9mcH4pxv29E3qTS0svSg==}
+    engines: {node: ^18.20.2 || >=20.9.0}
     peerDependencies:
       payload: 3.32.0
 
@@ -3429,6 +3438,10 @@ packages:
         optional: true
       sass:
         optional: true
+
+  nodemailer@6.9.16:
+    resolution: {integrity: sha512-psAuZdTIRN08HKVd/E8ObdV6NO7NTBY3KsC30F7M4H1OnmLCUNaS56FpYxyb26zWLSyYF9Ozch9KYHhHegsiOQ==}
+    engines: {node: '>=6.0.0'}
 
   noms@0.0.0:
     resolution: {integrity: sha512-lNDU9VJaOPxUmXcLb+HQFeUgQQPtMI24Gt6hgfuMHRJgMRHMF/qZ4HJD3GDru4sSw9IQl2jPjAYnQrdIeLbwow==}
@@ -5767,6 +5780,11 @@ snapshots:
       - sql.js
       - sqlite3
 
+  '@payloadcms/email-nodemailer@3.32.0(payload@3.32.0(graphql@16.10.0)(typescript@5.8.2))':
+    dependencies:
+      nodemailer: 6.9.16
+      payload: 3.32.0(graphql@16.10.0)(typescript@5.8.2)
+
   '@payloadcms/graphql@3.32.0(graphql@16.10.0)(payload@3.32.0(graphql@16.10.0)(typescript@5.8.2))(typescript@5.8.2)':
     dependencies:
       graphql: 16.10.0
@@ -8095,6 +8113,8 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+
+  nodemailer@6.9.16: {}
 
   noms@0.0.0:
     dependencies:

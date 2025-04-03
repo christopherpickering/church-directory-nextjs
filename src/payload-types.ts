@@ -272,6 +272,10 @@ export interface User {
   id: number
   name?: string | null
   role?: ('admin' | 'user') | null
+  /**
+   * If checked, the user will receive email notifications for new submissions.
+   */
+  receiveEmailNotifications?: boolean | null
   updatedAt: string
   createdAt: string
   email: string
@@ -743,6 +747,7 @@ export interface MediaSelect<T extends boolean = true> {
 export interface UsersSelect<T extends boolean = true> {
   name?: T
   role?: T
+  receiveEmailNotifications?: T
   updatedAt?: T
   createdAt?: T
   email?: T
