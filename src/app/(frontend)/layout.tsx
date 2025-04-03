@@ -33,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
     }),
     twitter: {
       card: 'summary_large_image',
-      creator: '@payloadcms',
+      creator: '@churchdirectory',
     },
   }
 }
@@ -62,10 +62,10 @@ export default async function RootLayout({
           </>
         ) : (
           <>
-            <link href="/favicon.ico" rel="icon" sizes="32x32" />
             <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
           </>
         )}
+        <title>{settings?.title || 'Church Directory'}</title>
       </head>
       <body className="container">
         <Providers>{children}</Providers>

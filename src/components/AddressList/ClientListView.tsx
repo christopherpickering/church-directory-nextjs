@@ -18,6 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { type FormEvent, useState } from 'react'
 
 interface ClientListViewProps {
@@ -38,6 +39,7 @@ export default function ClientListView({
   onPageChange,
 }: ClientListViewProps) {
   const [searchInput, setSearchInput] = useState(searchQuery)
+  const router = useRouter()
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault()
@@ -93,7 +95,13 @@ export default function ClientListView({
               </TableRow>
             ) : (
               addresses.map((address) => (
-                <TableRow key={address.id}>
+                <TableRow
+                  key={address.id}
+                  className="hover:cursor-pointer hover:bg-gray-300 hover:shadow-md"
+                  onClick={() =>
+                    router.push(`/addresses/${address.type}/${address.id}`)
+                  }
+                >
                   <TableCell className="font-medium">
                     {address.postalCode}
                   </TableCell>
