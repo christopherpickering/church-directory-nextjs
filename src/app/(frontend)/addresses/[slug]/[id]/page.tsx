@@ -316,7 +316,7 @@ export default async function AddressDetailPage({
                 })()}
             </div>
 
-            <div className="h-[500px] overflow-hidden rounded-lg border">
+            <div className="max-h-[400px] overflow-hidden rounded-lg border">
               <AddressPageClient addresses={address} />
             </div>
           </div>
