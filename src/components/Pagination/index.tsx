@@ -16,15 +16,53 @@ export const Pagination: React.FC<{
   className?: string
   page: number
   totalPages: number
+  onPageChange?: (page: number) => void
 }> = (props) => {
   const router = useRouter()
 
-  const { className, page, totalPages } = props
+  const { className, page, totalPages, onPageChange } = props
   const hasNextPage = page < totalPages
   const hasPrevPage = page > 1
 
-  const hasExtraPrevPages = page - 1 > 1
-  const hasExtraNextPages = page + 1 < totalPages
+  const handlePageChange = (targetPage: number) => {
+    if (onPageChange) {
+      onPageChange(targetPage)
+    } else {
+      router.push(`/posts/page/${targetPage}`)
+    }
+  }
+
+  const getPageNumbers = () => {
+    const pages = []
+
+    if (page > 1) {
+      pages.push(1)
+    }
+
+    if (page > 3) {
+      pages.push(-1)
+    }
+
+    if (page > 2) {
+      pages.push(page - 1)
+    }
+
+    pages.push(page)
+
+    if (page < totalPages - 1) {
+      pages.push(page + 1)
+    }
+
+    if (page < totalPages - 2) {
+      pages.push(-2)
+    }
+
+    if (page < totalPages) {
+      pages.push(totalPages)
+    }
+
+    return pages
+  }
 
   return (
     <div className={cn('my-12', className)}>
@@ -34,63 +72,41 @@ export const Pagination: React.FC<{
             <PaginationPrevious
               disabled={!hasPrevPage}
               onClick={() => {
-                router.push(`/posts/page/${page - 1}`)
+                if (hasPrevPage) {
+                  handlePageChange(page - 1)
+                }
               }}
             />
           </PaginationItem>
 
-          {hasExtraPrevPages && (
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-          )}
+          {getPageNumbers().map((pageNumber, _index) => {
+            if (pageNumber < 0) {
+              return (
+                <PaginationItem key={`ellipsis-${pageNumber}`}>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )
+            }
 
-          {hasPrevPage && (
-            <PaginationItem>
-              <PaginationLink
-                onClick={() => {
-                  router.push(`/posts/page/${page - 1}`)
-                }}
-              >
-                {page - 1}
-              </PaginationLink>
-            </PaginationItem>
-          )}
-
-          <PaginationItem>
-            <PaginationLink
-              isActive
-              onClick={() => {
-                router.push(`/posts/page/${page}`)
-              }}
-            >
-              {page}
-            </PaginationLink>
-          </PaginationItem>
-
-          {hasNextPage && (
-            <PaginationItem>
-              <PaginationLink
-                onClick={() => {
-                  router.push(`/posts/page/${page + 1}`)
-                }}
-              >
-                {page + 1}
-              </PaginationLink>
-            </PaginationItem>
-          )}
-
-          {hasExtraNextPages && (
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-          )}
+            return (
+              <PaginationItem key={`page-${pageNumber}`}>
+                <PaginationLink
+                  isActive={pageNumber === page}
+                  onClick={() => handlePageChange(pageNumber)}
+                >
+                  {pageNumber}
+                </PaginationLink>
+              </PaginationItem>
+            )
+          })}
 
           <PaginationItem>
             <PaginationNext
               disabled={!hasNextPage}
               onClick={() => {
-                router.push(`/posts/page/${page + 1}`)
+                if (hasNextPage) {
+                  handlePageChange(page + 1)
+                }
               }}
             />
           </PaginationItem>

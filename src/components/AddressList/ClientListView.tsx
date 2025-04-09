@@ -1,14 +1,9 @@
 'use client'
 
 import type { AddressData } from '@/components/Maps/type'
+import { Pagination } from '@/components/Pagination'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-} from '@/components/ui/pagination'
 import {
   Table,
   TableBody,
@@ -17,7 +12,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { type FormEvent, useState } from 'react'
 
@@ -122,101 +116,12 @@ export default function ClientListView({
       </div>
 
       {totalPages > 1 && (
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() =>
-                  currentPage > 1 && handlePageChange(currentPage - 1)
-                }
-                disabled={currentPage <= 1}
-                aria-label="Previous page"
-                className="hover:cursor-pointer"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-            </PaginationItem>
-
-            {/* First page */}
-            {currentPage > 3 && (
-              <PaginationItem>
-                <Button
-                  variant="outline"
-                  onClick={() => handlePageChange(1)}
-                  className="hover:cursor-pointer"
-                >
-                  1
-                </Button>
-              </PaginationItem>
-            )}
-
-            {/* Ellipsis if needed */}
-            {currentPage > 4 && (
-              <PaginationItem>
-                <PaginationEllipsis className="hover:cursor-pointer" />
-              </PaginationItem>
-            )}
-
-            {/* Page numbers near current page */}
-            {Array.from({ length: totalPages }, (_, i) => i + 1)
-              .filter(
-                (page) =>
-                  page === 1 ||
-                  page === totalPages ||
-                  (page >= currentPage - 1 && page <= currentPage + 1),
-              )
-              .map((page) => (
-                <PaginationItem key={page}>
-                  <Button
-                    variant={page === currentPage ? 'default' : 'outline'}
-                    onClick={() => handlePageChange(page)}
-                    aria-label={`Page ${page}`}
-                    aria-current={page === currentPage ? 'page' : undefined}
-                    className="hover:cursor-pointer"
-                  >
-                    {page}
-                  </Button>
-                </PaginationItem>
-              ))}
-
-            {/* Ellipsis if needed */}
-            {currentPage < totalPages - 3 && (
-              <PaginationItem>
-                <PaginationEllipsis className="hover:cursor-pointer" />
-              </PaginationItem>
-            )}
-
-            {/* Last page if not showing in the loop above */}
-            {currentPage < totalPages - 2 && totalPages > 4 && (
-              <PaginationItem>
-                <Button
-                  variant="outline"
-                  onClick={() => handlePageChange(totalPages)}
-                  className="hover:cursor-pointer"
-                >
-                  {totalPages}
-                </Button>
-              </PaginationItem>
-            )}
-
-            <PaginationItem>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() =>
-                  currentPage < totalPages && handlePageChange(currentPage + 1)
-                }
-                disabled={currentPage >= totalPages}
-                aria-label="Next page"
-                className="hover:cursor-pointer"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <Pagination
+          page={currentPage}
+          totalPages={totalPages}
+          className="mt-4"
+          onPageChange={handlePageChange}
+        />
       )}
     </div>
   )
