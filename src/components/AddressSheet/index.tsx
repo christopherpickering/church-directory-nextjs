@@ -1,11 +1,5 @@
 'use client'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet'
+import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { ArrowLeft } from 'lucide-react'
 import type React from 'react'
 
@@ -24,18 +18,12 @@ export function AddressSheet({ children }: { children: React.ReactNode }) {
         router.back()
       }}
     >
-      <SheetContent className="w-2/3 sm:max-w-2/3">
-        <SheetHeader>
-          <SheetTitle>Edit profile</SheetTitle>
-          <SheetDescription>
-            Make changes to your profile here. Click save when you're done.
-          </SheetDescription>
-        </SheetHeader>
+      <SheetContent className="w-2/3 sm:max-w-2/3" hideCloseButton={true}>
         <div className="mb-8">
           <Button
             variant={'link'}
             onClick={() => router.back()}
-            className="inline-flex items-center text-primary hover:text-primary/80"
+            className="inline-flex items-center pt-10 text-primary hover:text-primary/80"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to addresses

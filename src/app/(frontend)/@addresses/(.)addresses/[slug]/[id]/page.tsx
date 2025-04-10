@@ -1,8 +1,8 @@
 import { getAddressById } from '@/app/(frontend)/addresses/[slug]/[id]/page'
 import { AddressDetails } from '@/components/AddressDetails'
 import { AddressSheet } from '@/components/AddressSheet'
+import type { Contact, Location } from '@/types/address-types'
 import { notFound } from 'next/navigation'
-
 export default async function Page({ params }: { params: Promise<any> }) {
   const param = await params
 
