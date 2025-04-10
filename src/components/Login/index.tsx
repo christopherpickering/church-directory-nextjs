@@ -83,9 +83,9 @@ function LoginForm({ slug = 'login' }) {
             })}
           />
           <div className="text-red-700 text-sm">
-            {!errors.password?.message && errors.password?.type === 'required'
+            {/*{!errors.password?.message && errors.password?.type === 'required'
               ? 'required'
-              : errors.password?.message}
+              : errors.password?.message}*/}
             {error && (
               <div className="py-2 text-red-700 text-sm">
                 {error === 'invalidCredentials'

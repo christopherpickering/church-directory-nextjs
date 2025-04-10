@@ -40,7 +40,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({
   children,
-}: { children: React.ReactNode }) {
+  addresses,
+}: { children: React.ReactNode; addresses: React.ReactNode }) {
   const settings = await getSiteSettings()
 
   return (
@@ -67,8 +68,11 @@ export default async function RootLayout({
         )}
         <title>{settings?.title || 'Church Directory'}</title>
       </head>
-      <body className="container">
-        <Providers>{children}</Providers>
+      <body>
+        <Providers>
+          <div className="container">{children}</div>
+          {addresses}
+        </Providers>
       </body>
     </html>
   )
