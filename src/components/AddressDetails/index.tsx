@@ -20,10 +20,6 @@ export const AddressDetails = ({
       <div className="max-h-[calc(100vh-120px)] overflow-y-auto p-4 sm:p-6">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           <div className="space-y-6">
-            <h1 className="font-bold text-2xl sm:text-3xl">
-              {addressDetails.name}
-            </h1>
-
             <div className="space-y-4 rounded-lg border p-4 sm:p-6">
               <div className="flex items-start">
                 <MapPin className="mt-0.5 mr-3 h-5 w-5 shrink-0 text-primary" />
