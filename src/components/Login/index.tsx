@@ -26,12 +26,7 @@ function LoginForm({ slug = 'login' }) {
     router.push(`/?warning=${encodeURIComponent('You are already logged in.')}`)
   }
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setFocus,
-  } = useForm<FormData>()
+  const { register, handleSubmit, setFocus } = useForm<FormData>()
 
   const onSubmit = useCallback(
     async (data: FormData) => {
@@ -79,13 +74,13 @@ function LoginForm({ slug = 'login' }) {
             required
             disabled={isSubmitting}
             {...register('password', {
-              required: 'true',
+              required: true,
             })}
           />
           <div className="text-red-700 text-sm">
-            {!errors.password?.message && errors.password?.type === 'required'
+            {/*{!errors.password?.message && errors.password?.type === 'required'
               ? 'required'
-              : errors.password?.message}
+              : errors.password?.message}*/}
             {error && (
               <div className="py-2 text-red-700 text-sm">
                 {error === 'invalidCredentials'
