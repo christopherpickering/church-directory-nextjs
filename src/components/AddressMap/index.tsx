@@ -14,17 +14,30 @@ export const AddressMap = ({
   objects: Contact | Location
   className?: string | undefined
 }) => {
-  const pathname = usePathname()
+  const _pathname = usePathname()
   const [mapVisible, setMapVisible] = useState(false)
+
+  // Memoize map component to prevent unnecessary rerenders
   const ImportedMap = useMemo(
     () =>
       dynamic(() => import('@/components/Maps/Map'), {
         ssr: false,
       }),
-    [pathname],
+    [], // Remove pathname dependency
   )
 
-  const address = objects.address?.addressLine1
+  // Memoize address data to prevent rerenders
+  const addressData = useMemo(() => {
+    return {
+      address: objects.address?.addressLine1,
+      lat: objects.address?.latitude || 0,
+      long: objects.address?.longitude || 0,
+    }
+  }, [
+    objects.address?.addressLine1,
+    objects.address?.latitude,
+    objects.address?.longitude,
+  ])
 
   return (
     <div
@@ -36,9 +49,9 @@ export const AddressMap = ({
       {!mapVisible && <Skeleton className="h-full max-h-[400px] w-full" />}
       <ImportedMap
         className={'h-full max-h-[400px] w-full'}
-        address={address}
-        lat={objects.address?.latitude || 0}
-        long={objects.address?.longitude || 0}
+        address={addressData.address}
+        lat={addressData.lat}
+        long={addressData.long}
         whenReady={() => setMapVisible(true)}
       />
     </div>
