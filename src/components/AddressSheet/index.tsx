@@ -18,18 +18,23 @@ export function AddressSheet({ children }: { children: React.ReactNode }) {
         router.back()
       }}
     >
-      <SheetContent className="w-full" hideCloseButton={true}>
-        <div className="mb-8">
-          <Button
-            variant={'link'}
-            onClick={() => router.back()}
-            className="inline-flex items-center pt-10 text-primary hover:text-primary/80"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to addresses
-          </Button>
+      <SheetContent
+        className="h-full w-full overflow-y-auto px-4 pt-10 pb-20"
+        hideCloseButton={true}
+      >
+        <div className="container mx-auto max-w-[86rem] ">
+          <div className="mb-8">
+            <Button
+              variant={'link'}
+              onClick={() => router.back()}
+              className="inline-flex items-center text-primary hover:text-primary/80"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to addresses
+            </Button>
+          </div>
+          {children}
         </div>
-        {children}
       </SheetContent>
     </Sheet>
   )

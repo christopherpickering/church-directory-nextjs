@@ -28,13 +28,16 @@ const ExportMap = ({
 }: MapProps) => {
   const map = useRef<L.Map>(null)
   const marker = useRef<L.Marker>(null)
-  const pathname = usePathname()
+  const _pathname = usePathname()
+
+  // Store initial coordinates to prevent unnecessary rerenders
+  const initialCoords = useRef({ lat, long })
 
   useEffect(() => {
     if (
       address &&
-      !lat &&
-      !long &&
+      !initialCoords.current.lat &&
+      !initialCoords.current.long &&
       process.env.NEXT_PUBLIC_LOCATIONIQ_ACCESS_TOKEN
     ) {
       const provider = new LocationIQProvider({
@@ -51,13 +54,13 @@ const ExportMap = ({
         }
       })
     }
-  }, [pathname, address, lat, long])
+  }, [address]) // Remove pathname and use only address as dependency
 
   return (
     <MapContainer
-      key={lat.toString() + long.toString()}
+      key={`map-${initialCoords.current.lat}-${initialCoords.current.long}`}
       className={cn('z-0', className)}
-      center={[lat, long]}
+      center={[initialCoords.current.lat, initialCoords.current.long]}
       ref={map}
       zoom={9}
       scrollWheelZoom={true}
@@ -67,7 +70,10 @@ const ExportMap = ({
         url={`https://api.mapbox.com/styles/v1/christopherpickering/cl8ywzj0i00dc15mvjr9pfvcu/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`}
       />
       <Fullscreen />
-      <Marker position={[lat, long]} ref={marker}>
+      <Marker
+        position={[initialCoords.current.lat, initialCoords.current.long]}
+        ref={marker}
+      >
         <Popup>{address}</Popup>
       </Marker>
     </MapContainer>

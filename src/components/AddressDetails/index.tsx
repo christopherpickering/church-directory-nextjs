@@ -17,7 +17,7 @@ export const AddressDetails = ({
 }: AddressDetailsProps) => {
   return (
     <>
-      <div className="max-h-[calc(100vh-120px)] overflow-y-auto p-4 sm:p-6">
+      <div className="container mx-auto h-full max-w-[86rem] px-4 pt-10 pb-20">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           <div className="space-y-6">
             <div className="space-y-4 rounded-lg border p-4 sm:p-6">
