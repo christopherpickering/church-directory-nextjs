@@ -18,7 +18,7 @@ export function AddressSheet({ children }: { children: React.ReactNode }) {
         router.back()
       }}
     >
-      <SheetContent className="w-2/3 sm:max-w-2/3" hideCloseButton={true}>
+      <SheetContent className="w-full" hideCloseButton={true}>
         <div className="mb-8">
           <Button
             variant={'link'}
