@@ -7,14 +7,12 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/utilities/utils'
 import { Check, ChevronDown } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import { usePathname } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import React from 'react'
 
 export default function MapClientComponent({
   addresses,
 }: { addresses: AddressData[] }) {
-  const pathname = usePathname()
   const [mapVisible, setMapVisible] = useState(false)
   const [selectedState, setSelectedState] = useState<string>('all')
   const [selectedType, setSelectedType] = useState<string>('all')
@@ -70,7 +68,7 @@ export default function MapClientComponent({
       dynamic(() => import('@/components/Maps/MultiMap'), {
         ssr: false,
       }),
-    [pathname],
+    [],
   )
 
   const states = useMemo(() => {
