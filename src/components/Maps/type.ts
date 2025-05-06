@@ -13,6 +13,7 @@ export interface AddressData {
   phone: string
   latitude?: number | null
   longitude?: number | null
+  hideFromMap?: boolean
   geocodingStatus?:
     | ('not_geocoded' | 'geocoding' | 'geocoded' | 'failed')
     | null
