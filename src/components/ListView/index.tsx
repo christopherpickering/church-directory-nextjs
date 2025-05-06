@@ -2,7 +2,6 @@
 
 import type { AddressData } from '@/components/Maps/type'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import {
   Pagination,
   PaginationContent,
@@ -19,31 +18,20 @@ import {
 } from '@/components/ui/table'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { type FormEvent, useState } from 'react'
+
 interface ListViewProps {
   addresses: AddressData[]
   totalPages: number
   currentPage: number
-  searchQuery: string
 }
 
 export default function ListView({
   addresses,
   totalPages,
   currentPage,
-  searchQuery,
 }: ListViewProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [searchInput, setSearchInput] = useState(searchQuery)
-
-  const handleSearch = (e: FormEvent) => {
-    e.preventDefault()
-    const params = new URLSearchParams(searchParams.toString())
-    params.set('search', searchInput)
-    params.set('page', '1')
-    router.push(`/addresses?${params.toString()}`)
-  }
 
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -53,21 +41,6 @@ export default function ListView({
 
   return (
     <div className="space-y-4">
-      <form
-        onSubmit={handleSearch}
-        className="flex flex-col gap-2 sm:flex-row sm:items-center"
-      >
-        <Input
-          className="w-full"
-          placeholder="Search by location, zip code, ..."
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-        <Button type="submit" className="w-full sm:w-auto">
-          Search
-        </Button>
-      </form>
-
       <div className="overflow-x-auto rounded-md border">
         <Table>
           <TableHeader>

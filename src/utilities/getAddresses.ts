@@ -10,7 +10,11 @@ const buildAddress = (
   object: Location | Contact,
   slug: string,
   fullName: string | null = null,
+  countries: Record<string, string> = {},
 ): AddressData => {
+  const countryId = object.address.country?.toString() || ''
+  const countryName = countries[countryId] || countryId
+
   return {
     id: object.id,
     city: object.address.city,
@@ -18,10 +22,11 @@ const buildAddress = (
     addressLine2: object.address.addressLine2,
     state: object.address.state,
     postalCode: object.address.postalCode,
-    country: object.address.country,
+    country: countryName,
     phone: object.phoneNumber || '',
     latitude: object.address.latitude || 0,
     longitude: object.address.longitude || 0,
+    hideFromMap: object.address.hideFromMap === true,
     type: slug as 'locations' | 'contacts',
     contact: fullName ? { fullName } : null,
   }
@@ -30,6 +35,16 @@ const buildAddress = (
 export async function getAddresses() {
   const payload = await getPayload({ config: configPromise })
   const addresses: AddressData[] = []
+
+  const countriesResult = await payload.find({
+    collection: 'countries',
+    limit: 300,
+  })
+
+  const countriesMap: Record<string, string> = {}
+  for (const country of countriesResult.docs) {
+    countriesMap[country.countryId] = country.name
+  }
 
   const locations = await payload.find({
     collection: 'locations',
@@ -50,9 +65,11 @@ export async function getAddresses() {
           },
         },
       })
-      addresses.push(buildAddress(updatedLocation, 'locations'))
+      addresses.push(
+        buildAddress(updatedLocation, 'locations', null, countriesMap),
+      )
     } else {
-      addresses.push(buildAddress(location, 'locations'))
+      addresses.push(buildAddress(location, 'locations', null, countriesMap))
     }
   }
 
@@ -80,12 +97,27 @@ export async function getAddresses() {
           },
         },
       })
-      addresses.push(buildAddress(updatedContact, 'contacts', contact.fullName))
+      addresses.push(
+        buildAddress(
+          updatedContact,
+          'contacts',
+          contact.fullName,
+          countriesMap,
+        ),
+      )
     } else {
-      addresses.push(buildAddress(contact, 'contacts', contact.fullName))
+      addresses.push(
+        buildAddress(contact, 'contacts', contact.fullName, countriesMap),
+      )
     }
   }
   return addresses
+}
+
+// Get only addresses that should be shown on the map
+export async function getMapAddresses() {
+  const allAddresses = await getAddresses()
+  return allAddresses.filter((address) => !address.hideFromMap)
 }
 
 // export async function getAddressById(id: string) {
@@ -118,7 +150,7 @@ export default function build_address(object: any) {
 
   // <house>, <street>, <neighborhood>, <city>, <state>, <zip>, <country>
 
-  const country = object.address?.country?.name || ''
+  const country = object.address?.country || ''
 
   // some states remove country.
   // if (object.state && object.state.toLowerCase() == 'puerto rico') {
