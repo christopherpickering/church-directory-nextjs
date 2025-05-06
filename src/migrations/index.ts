@@ -4,6 +4,8 @@ import * as migration_20250331_220639 from './20250331_220639';
 import * as migration_20250401_182905_added_page_content__removed_globals from './20250401_182905_added_page_content__removed_globals';
 import * as migration_20250402_160206 from './20250402_160206';
 import * as migration_20250403_202746_added_receiveEmail_to_users from './20250403_202746_added_receiveEmail_to_users';
+import * as migration_20250506_131617_added_countries_collection from './20250506_131617_added_countries_collection';
+import * as migration_20250506_150251_added_hide_from_map_field_to_addresses from './20250506_150251_added_hide_from_map_field_to_addresses';
 
 export const migrations = [
   {
@@ -34,6 +36,16 @@ export const migrations = [
   {
     up: migration_20250403_202746_added_receiveEmail_to_users.up,
     down: migration_20250403_202746_added_receiveEmail_to_users.down,
-    name: '20250403_202746_added_receiveEmail_to_users'
+    name: '20250403_202746_added_receiveEmail_to_users',
+  },
+  {
+    up: migration_20250506_131617_added_countries_collection.up,
+    down: migration_20250506_131617_added_countries_collection.down,
+    name: '20250506_131617_added_countries_collection',
+  },
+  {
+    up: migration_20250506_150251_added_hide_from_map_field_to_addresses.up,
+    down: migration_20250506_150251_added_hide_from_map_field_to_addresses.down,
+    name: '20250506_150251_added_hide_from_map_field_to_addresses'
   },
 ];

@@ -18,7 +18,9 @@ import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import invariant from 'tiny-invariant'
 import { Contacts } from './collections/Contact'
 import { ContactSubmissions } from './collections/ContactSubmissions'
+import { Countries } from './collections/Countries'
 import { Locations } from './collections/Location'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -65,7 +67,15 @@ export default buildConfig({
     },
   }),
   // database-adapter-config-end
-  collections: [Pages, Media, Users, Locations, Contacts, ContactSubmissions],
+  collections: [
+    Pages,
+    Media,
+    Users,
+    Locations,
+    Contacts,
+    ContactSubmissions,
+    Countries,
+  ],
   email: process.env.SMTP_HOST
     ? nodemailerAdapter({
         defaultFromAddress: process.env.SMTP_FROM || 'no-reply@example.com',

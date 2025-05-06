@@ -12,7 +12,10 @@ export const address: AddressType = ({ overrides = {} } = {}) => {
       {
         name: 'country',
         type: 'text',
-        defaultValue: 'USA',
+        defaultValue: '188', // USA countryId
+        admin: {
+          description: 'Country ID will be used to look up country name',
+        },
       },
       {
         name: 'addressLine1',
@@ -60,6 +63,14 @@ export const address: AddressType = ({ overrides = {} } = {}) => {
         admin: {
           description: 'Automatically populated when address is saved',
           readOnly: true,
+          position: 'sidebar',
+        },
+      },
+      {
+        name: 'hideFromMap',
+        type: 'checkbox',
+        defaultValue: false,
+        admin: {
           position: 'sidebar',
         },
       },

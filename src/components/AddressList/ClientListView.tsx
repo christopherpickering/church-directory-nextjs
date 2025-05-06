@@ -2,8 +2,6 @@
 
 import type { AddressData } from '@/components/Maps/type'
 import { Pagination } from '@/components/Pagination'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -13,14 +11,11 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { useRouter } from 'next/navigation'
-import { type FormEvent, useState } from 'react'
 
 interface ClientListViewProps {
   addresses: AddressData[]
   totalPages: number
   currentPage: number
-  searchQuery: string
-  onSearch: (query: string) => void
   onPageChange: (page: number) => void
 }
 
@@ -28,17 +23,9 @@ export default function ClientListView({
   addresses,
   totalPages,
   currentPage,
-  searchQuery,
-  onSearch,
   onPageChange,
 }: ClientListViewProps) {
-  const [searchInput, setSearchInput] = useState(searchQuery)
   const router = useRouter()
-
-  const handleSearch = (e: FormEvent) => {
-    e.preventDefault()
-    onSearch(searchInput)
-  }
 
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return
@@ -47,21 +34,6 @@ export default function ClientListView({
 
   return (
     <div className="space-y-4">
-      <form
-        onSubmit={handleSearch}
-        className="flex flex-col gap-2 sm:flex-row sm:items-center"
-      >
-        <Input
-          className="w-full"
-          placeholder="Search by location, zip code, ..."
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-        <Button type="submit" className="w-full sm:w-auto">
-          Search
-        </Button>
-      </form>
-
       <div className="overflow-x-auto rounded-md border">
         <Table>
           <TableHeader>

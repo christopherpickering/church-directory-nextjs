@@ -73,6 +73,7 @@ export interface Config {
     locations: Location
     contacts: Contact
     'contact-submissions': ContactSubmission
+    countries: Country
     search: Search
     'payload-jobs': PayloadJob
     'payload-locked-documents': PayloadLockedDocument
@@ -89,6 +90,7 @@ export interface Config {
     'contact-submissions':
       | ContactSubmissionsSelect<false>
       | ContactSubmissionsSelect<true>
+    countries: CountriesSelect<false> | CountriesSelect<true>
     search: SearchSelect<false> | SearchSelect<true>
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>
     'payload-locked-documents':
@@ -307,6 +309,9 @@ export interface Location {
    */
   phoneNumber?: string | null
   address: {
+    /**
+     * Country ID will be used to look up country name
+     */
     country?: string | null
     addressLine1: string
     addressLine2?: string | null
@@ -322,6 +327,7 @@ export interface Location {
      * Automatically populated when address is saved
      */
     longitude?: number | null
+    hideFromMap?: boolean | null
     geocodingStatus?:
       | ('not_geocoded' | 'geocoding' | 'geocoded' | 'failed')
       | null
@@ -372,6 +378,9 @@ export interface Contact {
   email?: string | null
   phoneNumber?: string | null
   address: {
+    /**
+     * Country ID will be used to look up country name
+     */
     country?: string | null
     addressLine1: string
     addressLine2?: string | null
@@ -387,6 +396,7 @@ export interface Contact {
      * Automatically populated when address is saved
      */
     longitude?: number | null
+    hideFromMap?: boolean | null
     geocodingStatus?:
       | ('not_geocoded' | 'geocoding' | 'geocoded' | 'failed')
       | null
@@ -434,6 +444,23 @@ export interface ContactSubmission {
    * Admin notes about this submission
    */
   notes?: string | null
+  updatedAt: string
+  createdAt: string
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries".
+ */
+export interface Country {
+  id: number
+  /**
+   * The ID from the original JSON file
+   */
+  countryId: string
+  /**
+   * Country name
+   */
+  name: string
   updatedAt: string
   createdAt: string
 }
@@ -582,6 +609,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'contact-submissions'
         value: number | ContactSubmission
+      } | null)
+    | ({
+        relationTo: 'countries'
+        value: number | Country
       } | null)
     | ({
         relationTo: 'search'
@@ -779,6 +810,7 @@ export interface LocationsSelect<T extends boolean = true> {
         phone?: T
         latitude?: T
         longitude?: T
+        hideFromMap?: T
         geocodingStatus?: T
         lastGeocodedAt?: T
       }
@@ -809,6 +841,7 @@ export interface ContactsSelect<T extends boolean = true> {
         phone?: T
         latitude?: T
         longitude?: T
+        hideFromMap?: T
         geocodingStatus?: T
         lastGeocodedAt?: T
       }
@@ -828,6 +861,16 @@ export interface ContactSubmissionsSelect<T extends boolean = true> {
   message?: T
   status?: T
   notes?: T
+  updatedAt?: T
+  createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries_select".
+ */
+export interface CountriesSelect<T extends boolean = true> {
+  countryId?: T
+  name?: T
   updatedAt?: T
   createdAt?: T
 }
