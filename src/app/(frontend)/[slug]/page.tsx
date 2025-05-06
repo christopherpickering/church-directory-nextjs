@@ -27,7 +27,7 @@ export default async function SlugPage({
   searchParams: searchParamsPromise,
 }: Args) {
   const { slug = 'home' } = await paramsPromise
-  const { search, currentPage } = (await searchParamsPromise) || {}
+  const { currentPage } = (await searchParamsPromise) || {}
 
   const page: PageType | null = await queryPageBySlug({
     slug,
@@ -38,7 +38,6 @@ export default async function SlugPage({
   }
 
   const isHomepage = slug === 'home'
-  const searchQuery = search || ''
   const currentPageNumber = currentPage ? Number.parseInt(currentPage, 10) : 1
 
   const settings = await getSiteSettings()
@@ -73,7 +72,6 @@ export default async function SlugPage({
                 <TabsContent value="list" className="w-full">
                   <AddressList
                     addresses={addresses}
-                    initialSearchQuery={searchQuery}
                     initialPage={currentPageNumber}
                   />
                 </TabsContent>
