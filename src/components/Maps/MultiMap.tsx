@@ -18,7 +18,9 @@ type MapProps = HTMLAttributes<HTMLElement> & {
     type: string
     slug: string
     id: number
-    name: string | null
+    city: string | null
+    state: string | null
+    country: string | null
     lat: number | null
     long: number | null
     person: string | null
@@ -113,25 +115,34 @@ const MultiMap = ({
         }}
       >
         {points?.map((point) => {
-          const _title = `${point.type}: ${point.name}`
+          const _title = `${point.type}: ${point.city}, ${point.state}, ${point.country}`
           if (!(point.lat && point.long)) return null
           return (
             <Marker
-              key={point.id + point.lat + point.long + point.type + point.name}
+              key={
+                point.id +
+                point.lat +
+                point.long +
+                point.type +
+                point.city +
+                point.state +
+                point.country
+              }
               position={[point.lat, point.long]}
-              title={point.type}
+              title={_title}
             >
               <Popup>
                 <Link href={`/${point.type}/${point.slug}/${point.id}`}>
                   <div className="flex flex-col">
-                    <h3 className="font-semibold">type: {point.slug}</h3>
                     <p className="text-gray-500 text-sm">
-                      address: {point.name}
+                      {point.city && `${point.city}`}
+                      {point.city && point.state && ', '}
+                      {point.state && `${point.state}`}
+                      {(point.city || point.state) && point.country && ', '}
+                      {point.country && `${point.country}`}
                     </p>
                     {point.person && (
-                      <p className="text-gray-500 text-sm">
-                        person: {point.person}
-                      </p>
+                      <p className="text-gray-500 text-sm">{point.person}</p>
                     )}
                   </div>
                 </Link>

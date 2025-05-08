@@ -19,7 +19,7 @@ export function AddressSheet({ children }: { children: React.ReactNode }) {
       }}
     >
       <SheetContent
-        className="h-full w-full overflow-y-auto px-4 pt-10 pb-20"
+        className="h-full w-full overflow-y-auto px-4 pt-10 pb-20 md:max-w-2/3"
         hideCloseButton={true}
       >
         <div className="container mx-auto max-w-[86rem] ">
