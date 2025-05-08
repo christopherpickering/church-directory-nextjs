@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { cn } from '@/utilities/ui'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
@@ -21,27 +20,18 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${settings?.title || 'Church Directory'}`,
     },
     description:
-      settings?.description || 'A directory of churches and contacts.',
+      settings?.description || 'A directory of churches and correspondants.',
     metadataBase: new URL(getServerSideURL()),
-    openGraph: mergeOpenGraph({
-      title: settings?.title || 'Church Directory',
-      description:
-        settings?.description || 'A directory of churches and contacts.',
-      images: settings?.meta?.defaultImage
-        ? [{ url: settings.meta.defaultImage.url }]
-        : undefined,
-    }),
-    twitter: {
-      card: 'summary_large_image',
-      creator: '@churchdirectory',
-    },
   }
 }
 
 export default async function RootLayout({
   children,
   addresses,
-}: { children: React.ReactNode; addresses: React.ReactNode }) {
+}: {
+  children: React.ReactNode
+  addresses: React.ReactNode
+}) {
   const settings = await getSiteSettings()
 
   return (
@@ -67,6 +57,13 @@ export default async function RootLayout({
           </>
         )}
         <title>{settings?.title || 'Church Directory'}</title>
+        <meta
+          name="description"
+          content={
+            settings?.description ||
+            'A directory of churches and correspondants.'
+          }
+        />
       </head>
       <body>
         <Providers>

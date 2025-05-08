@@ -100,7 +100,7 @@ export const AddressDetails = ({
                 if (relatedContacts && relatedContacts.length > 0) {
                   return (
                     <div className="rounded-lg border p-4 sm:p-6">
-                      <h3 className="mb-3 font-semibold">Contact Persons</h3>
+                      <h3 className="mb-3 font-semibold">Correspondents</h3>
                       <div className="space-y-4">
                         {relatedContacts.map((contact) => (
                           <div
