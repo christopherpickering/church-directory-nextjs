@@ -79,10 +79,10 @@
     "@biomejs/biome": "1.9.4",
     "@commitlint/cli": "19.8.1",
     "@commitlint/config-conventional": "19.8.1",
-    "@tailwindcss/postcss": "4.1.7",
+    "@tailwindcss/postcss": "4.1.8",
     "@tailwindcss/typography": "0.5.16",
     "@types/escape-html": "1.0.4",
-    "@types/node": "22.15.23",
+    "@types/node": "22.15.24",
     "@types/react": "19.1.6",
     "@types/react-dom": "19.1.5",
     "commitizen": "4.3.1",
@@ -92,7 +92,7 @@
     "npm-run-all2": "8.0.4",
     "postcss": "8.5.3",
     "prettier": "^3.4.2",
-    "tailwindcss": "4.1.7",
+    "tailwindcss": "4.1.8",
     "typescript": "5.8.3"
   },
   "engines": {
