@@ -1,7 +1,7 @@
 {
   "extends": ["config:best-practices", ":automergeAll", "group:recommended"],
   "recreateWhen": "auto",
-  "baseBranches": ["dev"],
+  "baseBranchPatterns": ["dev"],
   "prHourlyLimit": 20,
   "prConcurrentLimit": 20,
   "ignoreDeps": ["prettier"],
