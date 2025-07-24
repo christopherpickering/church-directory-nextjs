@@ -2,7 +2,7 @@ version: '3'
 
 services:
   payload:
-    image: node:22-alpine@sha256:41e4389f3d988d2ed55392df4db1420ad048ae53324a8e2b7c6d19508288107e
+    image: node:22-alpine@sha256:5539840ce9d013fa13e3b9814c9353024be7ac75aca5db6d039504a56c04ea59
     ports:
       - '3000:3000'
     volumes:
@@ -16,7 +16,7 @@ services:
       - .env
 
   mongo:
-    image: mongo:latest@sha256:98028cf281bb5d49ace5e1ddbd4509e8f1382fe80ef1cf101eeefdc106d76cd4
+    image: mongo:latest@sha256:fc88459c77982eb464ea5a2c47fccc03a34dbab9bc12b1b864683176a68e3c9a
     ports:
       - '27017:27017'
     command:
