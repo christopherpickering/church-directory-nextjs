@@ -2,7 +2,6 @@ import type { AddressData } from '@/components/Maps/type'
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import { geocodeAddress } from './geocodeAddress'
 
 import type { Contact, Location } from '@/payload-types'
 
@@ -53,24 +52,7 @@ export async function getAddresses() {
   })
 
   for (const location of locations.docs) {
-    if (location.address.geocodingStatus !== 'geocoded') {
-      const geocodedResult = await geocodeAddress(location.address)
-      const updatedLocation = await payload.update({
-        collection: 'locations',
-        id: location.id,
-        data: {
-          address: {
-            ...location.address,
-            ...geocodedResult,
-          },
-        },
-      })
-      addresses.push(
-        buildAddress(updatedLocation, 'locations', null, countriesMap),
-      )
-    } else {
-      addresses.push(buildAddress(location, 'locations', null, countriesMap))
-    }
+    addresses.push(buildAddress(location, 'locations', null, countriesMap))
   }
 
   const contacts = await payload.find({
@@ -84,32 +66,9 @@ export async function getAddresses() {
   })
 
   for (const contact of contacts.docs) {
-    if (contact.address.geocodingStatus !== 'geocoded') {
-      const geocodedResult = await geocodeAddress(contact.address)
-
-      const updatedContact = await payload.update({
-        collection: 'contacts',
-        id: contact.id,
-        data: {
-          address: {
-            ...contact.address,
-            ...geocodedResult,
-          },
-        },
-      })
-      addresses.push(
-        buildAddress(
-          updatedContact,
-          'contacts',
-          contact.fullName,
-          countriesMap,
-        ),
-      )
-    } else {
-      addresses.push(
-        buildAddress(contact, 'contacts', contact.fullName, countriesMap),
-      )
-    }
+    addresses.push(
+      buildAddress(contact, 'contacts', contact.fullName, countriesMap),
+    )
   }
   return addresses
 }

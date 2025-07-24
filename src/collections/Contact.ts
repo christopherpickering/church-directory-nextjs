@@ -1,6 +1,7 @@
 import { admins } from '@/access/admins'
 import { checkRole } from '@/access/checkRole'
 import type { CollectionConfig } from 'payload'
+import { afterChangeGeocodeAddress } from '../hooks/afterChangeGeocodeAddress'
 import { address } from './Address'
 
 export const Contacts: CollectionConfig = {
@@ -20,6 +21,9 @@ export const Contacts: CollectionConfig = {
     update: admins,
     create: admins,
     delete: admins,
+  },
+  hooks: {
+    afterChange: [afterChangeGeocodeAddress],
   },
   fields: [
     {

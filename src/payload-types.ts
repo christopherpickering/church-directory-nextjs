@@ -964,14 +964,6 @@ export interface SiteSetting {
   id: number
   title: string
   description: string
-  meta?: {
-    defaultImage?: (number | null) | Media
-    favicon?: (number | null) | Media
-  }
-  contact?: {
-    email?: string | null
-    phone?: string | null
-  }
   updatedAt?: string | null
   createdAt?: string | null
 }
@@ -982,18 +974,6 @@ export interface SiteSetting {
 export interface SiteSettingsSelect<T extends boolean = true> {
   title?: T
   description?: T
-  meta?:
-    | T
-    | {
-        defaultImage?: T
-        favicon?: T
-      }
-  contact?:
-    | T
-    | {
-        email?: T
-        phone?: T
-      }
   updatedAt?: T
   createdAt?: T
   globalType?: T

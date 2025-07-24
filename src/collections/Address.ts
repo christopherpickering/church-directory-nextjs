@@ -53,7 +53,6 @@ export const address: AddressType = ({ overrides = {} } = {}) => {
         type: 'number',
         admin: {
           description: 'Automatically populated when address is saved',
-          readOnly: true,
           position: 'sidebar',
         },
       },
@@ -62,7 +61,6 @@ export const address: AddressType = ({ overrides = {} } = {}) => {
         type: 'number',
         admin: {
           description: 'Automatically populated when address is saved',
-          readOnly: true,
           position: 'sidebar',
         },
       },
@@ -79,7 +77,6 @@ export const address: AddressType = ({ overrides = {} } = {}) => {
         type: 'select',
         admin: {
           position: 'sidebar',
-          readOnly: true,
         },
         options: [
           {
@@ -106,7 +103,6 @@ export const address: AddressType = ({ overrides = {} } = {}) => {
         type: 'date',
         admin: {
           position: 'sidebar',
-          readOnly: true,
           date: {
             pickerAppearance: 'dayAndTime',
           },
